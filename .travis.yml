@@ -5,6 +5,9 @@ compiler:
 os: linux
 dist: bionic
 
+install:
+    - sudo apt install libgsl-dev
+
 script:
     - mkdir ./tests/build
     - cd tests/build

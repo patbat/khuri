@@ -5,7 +5,7 @@ compiler:
 os: linux
 dist: bionic
 
-install:
+before_install:
     - sudo apt install libgsl-dev
 
 script:

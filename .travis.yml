@@ -6,6 +6,7 @@ os: linux
 dist: bionic
 
 before_install:
+    - sudo add-apt-repository universe
     - sudo apt install libgsl-dev
 
 script:

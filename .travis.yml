@@ -6,7 +6,7 @@ os: linux
 dist: bionic
 
 install:
-    - sudo apt install googletest
+    # - sudo apt install googletest
     - sudo apt install libgtest-dev
 
 script:

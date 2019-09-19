@@ -5,6 +5,10 @@ compiler:
 os: linux
 dist: bionic
 
+install:
+    - sudo apt install googletest
+    - sudo apt install libgtest-dev
+
 script:
     - mkdir ./tests/build
     - cd tests/build

@@ -36,12 +36,21 @@ include_directories(../include)
 
 add_definitions(-Wall -pedantic -O3)
 
-add_executable(gsl_test
-    gsl_interface.cpp
+add_executable(test_gsl
+    test_gsl_interface.cpp
     ../src/gsl_interface.cpp)
-target_link_libraries(gsl_test gtest pthread gsl gslcblas)
+target_link_libraries(test_gsl gtest pthread gsl gslcblas)
+
+add_executable(test_cauchy
+    test_cauchy.cpp
+    ../src/gsl_interface.cpp
+    ../src/cauchy.cpp)
+target_link_libraries(test_cauchy gmock gtest pthread gsl gslcblas)
 
 enable_testing()
 
 add_test(NAME gsl
-    COMMAND ./gsl_test)
+    COMMAND ./test_gsl)
+
+add_test(NAME cauchy
+    COMMAND ./test_cauchy)

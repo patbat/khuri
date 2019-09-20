@@ -3,17 +3,12 @@
 #include "gmock/gmock.h"
 #include "gsl_interface.h"
 #include "gtest/gtest.h"
+#include "test_common.h"
 #include <vector>
 
 using cauchy::Complex;
 using constants::pi;
 using ::testing::ElementsAre;
-
-void expect_near(const Complex& z1, const Complex& z2, double tolerance=1e-16)
-{
-    EXPECT_NEAR(z1.real(), z2.real(), tolerance);
-    EXPECT_NEAR(z1.imag(), z2.imag(), tolerance);
-}
 
 Complex circle(double angle)
 {

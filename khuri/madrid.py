@@ -10,32 +10,31 @@ GeV).
 """
 import numpy as np
 
-class Parameters:
-    """The parameters of the Madrid phase."""
-    # constraint fit parameters
-    b0_cfd = 1.043
-    b1_cfd = 0.19
-    lambda1_cfd = 1.39
-    lambda2_cfd = -1.70
 
-    # unconstraint fit parameters
-    b0_ufd = 1.055
-    b1_ufd = 0.15
-    lambda1_ufd = 1.57
-    lambda2_ufd = -1.96
+# constraint fit parameters
+B0_CFD = 1.043
+B1_CFD = 0.19
+LAMBDA1_CFD = 1.39
+LAMBDA2_CFD = -1.70
 
-    s0 = 1050.0**2 # in (MeV)^2
+# unconstraint fit parameters
+B0_UFD = 1.055
+B1_UFD = 0.15
+LAMBDA1_UFD = 1.57
+LAMBDA2_UFD = -1.96
 
-    # The masses are parameters that determine the shape of the phase.
-    # They are not necessarily the physical masses of the particles.
-    kaon_mass = 496.0 # in MeV
-    rho_mass = 773.6 # in MeV
-    pion_mass = 139.57 # in MeV
+S0 = 1050.0**2 # in (MeV)^2
 
-    # The parametrization is not valid for energies below lowest
-    # or above highest.
-    lowest = 2.0*pion_mass # in MeV
-    highest = 1420 # in MeV
+# The masses are parameters that determine the shape of the phase.
+# They are not necessarily the physical masses of the particles.
+KAON_MASS = 496.0 # in MeV
+RHO_MASS = 773.6 # in MeV
+PION_MASS = 139.57 # in MeV
+
+# The parametrization is not valid for energies below LOWEST
+# or above HIGHEST.
+LOWEST = 2.0*PION_MASS # in MeV
+HIGHEST = 1420 # in MeV
 
 
 def _momentum(s, m):
@@ -51,7 +50,7 @@ def _momentum(s, m):
     return np.sqrt(0.25*s - m**2)
 
 
-def _w(s, s0=Parameters.s0):
+def _w(s, s0=S0):
     """Simplify the calculation of the phase.
 
     Parameters
@@ -67,7 +66,7 @@ def _w(s, s0=Parameters.s0):
     return  (a-b) / (a+b)
 
 
-def phase_low(s, m_pi, m_rho, b0, b1, s0=Parameters.s0):
+def phase_low(s, m_pi, m_rho, b0, b1, s0=S0):
     """Calculate the phase for s <= 4m_K^2
 
     Parameters
@@ -120,14 +119,14 @@ def lambda0(m_pi, m_k, m_rho, b0, b1, s0):
 @np.vectorize
 def phase(
         s,
-        m_pi=Parameters.pion_mass,
-        m_k=Parameters.kaon_mass,
-        m_rho=Parameters.rho_mass,
-        b0=Parameters.b0_cfd,
-        b1=Parameters.b1_cfd,
-        lambda_1=Parameters.lambda1_cfd,
-        lambda_2=Parameters.lambda2_cfd,
-        s0=Parameters.s0):
+        m_pi=PION_MASS,
+        m_k=KAON_MASS,
+        m_rho=RHO_MASS,
+        b0=B0_CFD,
+        b1=B1_CFD,
+        lambda_1=LAMBDA1_CFD,
+        lambda_2=LAMBDA2_CFD,
+        s0=S0):
     """Calculate the Madrid phase for the I=J=1 pi pi-> pi pi partial wave.
 
     Parameters
@@ -153,12 +152,12 @@ def phase(
         (default value is given in MeV^2)
     """
     if s < 4*m_pi**2:
-        print("below threshold")
+        raise ValueError(f'{s} is below threshold')
     elif s <= 4*m_k**2:
         return phase_low(s, m_pi, m_rho, b0, b1, s0)
     elif s <= 1420**2:
         l0 = lambda0(m_pi, m_k, m_rho, b0, b1, s0)
         return phase_high(s, m_k, l0, lambda_1, lambda_2)
     else:
-        print("above region, in which the parametrization of the phase is\
-                valid")
+        raise ValueError(f'{s} is above region, in which the parametrization'
+                          ' of the phase is valid')

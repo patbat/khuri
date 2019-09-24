@@ -16,12 +16,12 @@ matrix:
               - cmake ..
               - make
               - ctest
-        # # python tests (this includes tests of c++ code if there is a python
-        # # interface for that code and a corresponding test)
-        # - language: python
-        #   before_install:
-        #       - sudo apt install python-pytest
-        #   script:
-        #       - pip install .
-        #       - cd khuri/tests/
-        #       - pytest
+        # python tests (this includes tests of c++ code if there is a python
+        # interface for that code and a corresponding test)
+        - language: python
+          before_install:
+              - sudo apt install python-pytest
+          script:
+              - pip install .
+              - cd khuri/tests/
+              - pytest

@@ -11,7 +11,6 @@ matrix:
               - sudo apt update -q
               - sudo apt install libgsl-dev
           script:
-              - cd ../..
               - mkdir ./tests/build
               - cd tests/build
               - cmake ..

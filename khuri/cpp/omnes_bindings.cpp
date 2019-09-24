@@ -10,7 +10,7 @@ using gsl::Function;
 using gsl::Settings;
 
 
-PYBIND11_MODULE(omnes, m) {
+PYBIND11_MODULE(_khuri_omnes, m) {
     m.doc() = "The Omnes function.";
 
     py::class_<Omnes>(m, "Omnes")

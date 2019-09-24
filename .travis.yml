@@ -7,7 +7,6 @@ matrix:
               - clang
           os: linux
           dist: bionic
-
           before_install:
               - sudo add-apt-repository universe
               - sudo apt update -q
@@ -23,9 +22,12 @@ matrix:
         - language: python
           python: 3.7
           before_install:
+              - sudo add-apt-repository universe
+              - sudo apt update -q
+              - sudo apt install libgsl-dev
+          install:
               - pip install pytest
-              # - sudo apt install python-pytest
-          script:
               - pip install .
+          script:
               - cd khuri/tests/
               - pytest

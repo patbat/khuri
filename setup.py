@@ -1,3 +1,7 @@
+# Notice:
+# This `setup.py` file is adapted from
+# <https://github.com/pybind/cmake_example>.
+
 import os
 import re
 import sys

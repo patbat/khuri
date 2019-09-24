@@ -32,26 +32,26 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 
 # END GOOGLETEST SETUP ########################################################
 
-include_directories(../include)
+include_directories(../khuri/cpp)
 
 add_definitions(-Wall -pedantic -O3)
 
 add_executable(test_gsl
     test_gsl_interface.cpp
-    ../src/gsl_interface.cpp)
+    ../khuri/cpp/gsl_interface.cpp)
 target_link_libraries(test_gsl gtest pthread gsl gslcblas)
 
 add_executable(test_cauchy
     test_cauchy.cpp
-    ../src/gsl_interface.cpp
-    ../src/cauchy.cpp)
+    ../khuri/cpp/gsl_interface.cpp
+    ../khuri/cpp/cauchy.cpp)
 target_link_libraries(test_cauchy gmock gtest pthread gsl gslcblas)
 
 add_executable(test_omnes
     test_omnes.cpp
-    ../src/omnes.cpp
-    ../src/gsl_interface.cpp
-    ../src/cauchy.cpp)
+    ../khuri/cpp/omnes.cpp
+    ../khuri/cpp/gsl_interface.cpp
+    ../khuri/cpp/cauchy.cpp)
 target_link_libraries(test_omnes gtest pthread gsl gslcblas)
 
 enable_testing()

@@ -11,6 +11,13 @@ before_install:
     - sudo apt install libgsl-dev
 
 script:
+    # python tests (this includes tests of c++ code if there is a python
+    # interface for that code and a corresponding test)
+    - pip install .
+    - cd khuri/tests/
+    - pytest
+    # direct tests of facilities written in c++
+    - cd ../..
     - mkdir ./tests/build
     - cd tests/build
     - cmake ..

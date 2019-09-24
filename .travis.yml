@@ -1,3 +1,6 @@
+before_install:
+    - sudo apt update -q
+    - sudo apt install libgsl-dev
 matrix:
     include:
         # direct tests of facilities written in c++
@@ -7,10 +10,6 @@ matrix:
               - clang
           os: linux
           dist: bionic
-          before_install:
-              # - sudo add-apt-repository universe
-              - sudo apt update -q
-              - sudo apt install libgsl-dev
           script:
               - mkdir ./tests/build
               - cd tests/build
@@ -21,12 +20,7 @@ matrix:
         # interface for that code and a corresponding test)
         - language: python
           python: 3.7
-          before_install:
-              # - sudo add-apt-repository universe
-              - sudo apt update -q
-              - sudo apt install libgsl-dev
           install:
-              # - pip install pytest
               - pip install .
           script:
               - cd khuri/tests/

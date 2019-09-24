@@ -151,11 +151,11 @@ def phase(
         parameter, needs to have the same units as s
         (default value is given in MeV^2)
     """
-    if s < 4*m_pi**2:
+    if s < LOWEST**2:
         raise ValueError(f'{s} is below threshold')
     elif s <= 4*m_k**2:
         return phase_low(s, m_pi, m_rho, b0, b1, s0)
-    elif s <= 1420**2:
+    elif s <= HIGHEST**2:
         l0 = lambda0(m_pi, m_k, m_rho, b0, b1, s0)
         return phase_high(s, m_k, l0, lambda_1, lambda_2)
     else:

@@ -2,7 +2,9 @@ matrix:
     include:
         # direct tests of facilities written in c++
         - language: cpp
-          compiler: gcc
+          compiler:
+              - gcc
+              - clang
           os: linux
           dist: bionic
 
@@ -19,8 +21,10 @@ matrix:
         # python tests (this includes tests of c++ code if there is a python
         # interface for that code and a corresponding test)
         - language: python
+          python: 3.7
           before_install:
-              - sudo apt install python-pytest
+              - pip install pytest
+              # - sudo apt install python-pytest
           script:
               - pip install .
               - cd khuri/tests/

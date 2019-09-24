@@ -1,25 +1,28 @@
-language: cpp
-compiler:
-    # - clang
-    - gcc
-os: linux
-dist: bionic
+matrix:
+    include:
+        # direct tests of facilities written in c++
+        - language: cpp
+          compiler: gcc
+          os: linux
+          dist: bionic
 
-before_install:
-    - sudo add-apt-repository universe
-    - sudo apt update -q
-    - sudo apt install libgsl-dev
-
-script:
-    # python tests (this includes tests of c++ code if there is a python
-    # interface for that code and a corresponding test)
-    - pip install .
-    - cd khuri/tests/
-    - pytest
-    # direct tests of facilities written in c++
-    - cd ../..
-    - mkdir ./tests/build
-    - cd tests/build
-    - cmake ..
-    - make
-    - ctest
+          before_install:
+              - sudo add-apt-repository universe
+              - sudo apt update -q
+              - sudo apt install libgsl-dev
+          script:
+              - cd ../..
+              - mkdir ./tests/build
+              - cd tests/build
+              - cmake ..
+              - make
+              - ctest
+        # # python tests (this includes tests of c++ code if there is a python
+        # # interface for that code and a corresponding test)
+        # - language: python
+        #   before_install:
+        #       - sudo apt install python-pytest
+        #   script:
+        #       - pip install .
+        #       - cd khuri/tests/
+        #       - pytest

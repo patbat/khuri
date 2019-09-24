@@ -34,7 +34,7 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 
 include_directories(../khuri/cpp)
 
-add_definitions(-Wall -pedantic -O3)
+add_definitions(-Wall -pedantic)
 
 add_executable(test_gsl
     test_gsl_interface.cpp

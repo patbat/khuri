@@ -11,4 +11,4 @@ set(SOURCES "${SOURCE_DIR}/cauchy.cpp" "${SOURCE_DIR}/gsl_interface.cpp" "${SOUR
 
 add_subdirectory(lib/pybind11)
 pybind11_add_module(_khuri_omnes ${SOURCES} "${SOURCE_DIR}/omnes_bindings.cpp")
-target_link_libraries(_khuri_omnes PRIVATE gsl cln gslcblas)
+target_link_libraries(_khuri_omnes PRIVATE gsl gslcblas)

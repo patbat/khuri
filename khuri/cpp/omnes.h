@@ -43,7 +43,7 @@ public:
         ///< function to take care of the singularity in the integral.
         ///< @param config The settings for the integration routine.
 
-    std::complex<double> operator()(const std::complex<double>& s) const;
+    std::complex<double> operator()(std::complex<double> s) const;
         ///< Evaluate the Omnes function at `s`.
 
     double derivative_at_zero() const noexcept {return derivative;}

@@ -33,7 +33,7 @@ Omnes::Omnes(const gsl::Function& phase, double constant, double threshold,
 {
 }
 
-std::complex<double> Omnes::operator()(const std::complex<double>& s) const
+std::complex<double> Omnes::operator()(std::complex<double> s) const
 {
     // Apply the Schwartz reflection principle.
     if (s.imag()<0)

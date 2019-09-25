@@ -8,7 +8,7 @@ add_definitions(-Wall -pedantic -O3)
 
 set(SOURCE_DIR "./cpp/src")
 set(INCLUDE_DIR "./cpp/include")
-set(BINDING_DIR "./cpp/bindings")
+set(BINDING_DIR "./khuri/bindings")
 
 include_directories(${INCLUDE_DIR})
 

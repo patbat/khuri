@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to khuri's documentation!
-=================================
+khuri
+=====
 
 .. toctree::
    :maxdepth: 2
@@ -15,10 +15,21 @@ equations including facilities that are of general use when dealing with
 dispersion relations, e.g. Omnes function(s).
 
 
+Installation
+============
 
-Indices and tables
-==================
+To install this package, enter the following commands (without switching
+directories in between)::
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    git clone --recursive https://github.com/patbat/khuri.git
+    pip install ./khuri
+
+To check whether the install was successful, try the following inside a
+python script (or interactive session):
+
+.. code-block:: python
+
+   from khuri.madrid import phases
+
+   # the madrid phase evaluated at the mass of the rho meson
+   print(phases(760.0**2))

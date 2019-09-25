@@ -32,9 +32,9 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 
 # END GOOGLETEST SETUP ########################################################
 
-include_directories(..)
+include_directories(../include)
 
-set(SOURCE_DIR "..")
+set(SOURCE_DIR "../src")
 
 add_definitions(-Wall -pedantic)
 

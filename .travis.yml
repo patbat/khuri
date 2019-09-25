@@ -11,8 +11,8 @@ matrix:
           os: linux
           dist: bionic
           script:
-              - mkdir ./tests/build
-              - cd tests/build
+              - mkdir ./khuri/cpp/tests/build
+              - cd ./khuri/cpp/tests/build
               - cmake ..
               - make
               - ctest

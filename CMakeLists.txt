@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-Wall -pedantic -O3)
 
-set(SOURCE_DIR "khuri/cpp/src")
-set(INCLUDE_DIR "khuri/cpp/include")
-set(BINDING_DIR "khuri/cpp/bindings")
+set(SOURCE_DIR "./cpp/src")
+set(INCLUDE_DIR "./cpp/include")
+set(BINDING_DIR "./cpp/bindings")
 
 include_directories(${INCLUDE_DIR})
 

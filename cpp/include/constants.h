@@ -9,21 +9,6 @@ inline constexpr Number pi()
     return 3.14159265358979323846264338327950288419716939937510;
 }
 
-template<class Number=double>
-inline constexpr Number pion_mass()
-    /// Return the pion mass in the isospin limit in MeV.
-{
-    return 139.57;
-}
-
-template<class Number=double>
-inline constexpr Number pion_mass_squared()
-    /// @brief Return the squared pion mass in the isospin limit
-    /// in \f$\text{MeV}^2\f$.
-{
-    return pion_mass<Number>()*pion_mass<Number>();
-}
-
 /// PDG (Particle Data Group) values
 namespace pdg {
 constexpr double pion_decay{92.28}; // in MeV

@@ -46,11 +46,24 @@ First steps
 -----------
 
 To check whether the install was successful, try the following inside a
-python script (or interactive session):
+python script (or interactive session) to produce a plot of the Omnes function
+of the Madrid p-wave:
 
 .. code-block:: python
 
-   from khuri.madrid import phase
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-   # the madrid phase (p-wave) evaluated at the mass of the rho meson
-   print(phase(760.0**2))
+    from khuri.tests.test_omnes import omnes_function
+
+    o = omnes_function()
+
+    energies = np.linspace(0, 1200, 200)
+    omnes_values = o(energies**2)
+
+    plt.title('The Omnes function of the Madrid p-wave')
+    plt.plot(energies, np.real(omnes_values), label='Re')
+    plt.plot(energies, np.imag(omnes_values), label='Im')
+    plt.xlabel("E/MeV")
+    plt.legend()
+    plt.show()

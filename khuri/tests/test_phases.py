@@ -5,7 +5,7 @@ import khuri.madrid
 import khuri.phases
 
 
-MATCHING_POINT = 1000**2
+MATCHING_POINT = 1200**2
 
 
 @khuri.phases.asymptotic1(matching_point=MATCHING_POINT)

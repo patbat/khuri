@@ -24,9 +24,9 @@ Omnes::Omnes(const gsl::Function& phase, double threshold,
 {
 }
 
-Omnes::Omnes(const gsl::Function& phase, double constant, double threshold,
+Omnes::Omnes(const gsl::Function& phase, double threshold, double constant,
         double cut, double minimal_distance, gsl::Settings config)
-: phase_below{phase}, constant{constant}, threshold{threshold}, cut{cut},
+: phase_below{phase}, threshold{threshold}, constant{constant}, cut{cut},
     minimal_distance{minimal_distance},
     integrate{config},
     derivative{derivative_0(phase,threshold,cut,constant,integrate)}

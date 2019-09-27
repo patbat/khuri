@@ -22,8 +22,8 @@ PYBIND11_MODULE(_khuri_omnes, m) {
         .def(py::init<const Function&, double, double, double, double,
                       Settings>(),
              py::arg("phase"),
-             py::arg("constant"),
              py::arg("threshold"),
+             py::arg("constant"),
              py::arg("cut"),
              py::arg("minimal_distance") = 1e-10,
              py::arg("config") = Settings{})

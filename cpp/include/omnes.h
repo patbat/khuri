@@ -28,14 +28,14 @@ public:
         ///< function to take care of the singularity in the integral.
         ///< @param config The settings for the integration routine.
 
-    Omnes(const gsl::Function& phase, double constant, double threshold,
+    Omnes(const gsl::Function& phase, double threshold, double constant,
             double cut, double minimal_distance,
             gsl::Settings config=gsl::Settings{});
         ///< @param phase The phase of the Omnes function in
         ///< [`threshold`,`cut`].
+        ///< @param threshold The start of the branch cut of the Omnes function.
         ///< @param constant The phase of the Omnes function is set equal to
         ///< `constant` along the real line above `cut`.
-        ///< @param threshold The start of the branch cut of the Omnes function.
         ///< @param cut Cf. `phase` and `constant`
         ///< @param minimal_distance Half the width of a band
         ///< around the cut. For arguments of the Omnes function in this band,

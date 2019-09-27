@@ -20,9 +20,8 @@ matrix:
         # interface for that code and a corresponding test)
         - language: python
           python: 3.7
-          before install:
-              - pip install scipy
           install:
+              - pip install scipy
               - pip install .
           script:
               - cd khuri/tests/

@@ -24,9 +24,11 @@ Requirements
 
 To use this software, you need to have
 
-* cmake (version 3.5 or higher)
+* `cmake <https://cmake.org/>`_ (version 3.5 or newer)
 * a compiler that supports c++14
-* python (version 3.7.1 or higher) as well as
+* the `GNU scientific library <https://www.gnu.org/software/gsl/>`_ (version
+  2.1 or newer)
+* python (version 3.7.1 or newer) as well as
   standard python packages (numpy, scipy, setuptools, pytest), as
   provided e.g. via a standard installation of
   `anaconda <https://www.anaconda.com/distribution/>`_

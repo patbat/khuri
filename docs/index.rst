@@ -15,7 +15,6 @@ The aim of this project is to develop a general solver for Khuri-Treiman
 equations including facilities that are of general use when dealing with
 dispersion relations, e.g. Omnes function(s).
 
-
 Installation
 ============
 
@@ -42,26 +41,40 @@ switching directories in between)::
     git clone --recursive https://github.com/patbat/khuri.git
     pip install ./khuri
 
-(You may remove the source code directory afterwards).
+To check whether the install was successful, try the following::
+
+   cd khuri/khuri/tests/
+   pytest -v
+
+If everything works fine, several tests should run successfully.
 
 First steps
------------
+===========
 
-To check whether the install was successful, try the following inside a
-python script (or interactive session) to produce a plot of the Omnes function
-of the Madrid p-wave:
+Try the following inside a python script (or interactive session) to produce a
+plot of the Omnes function of the Madrid p-wave:
 
 .. code-block:: python
 
     import numpy as np
     import matplotlib.pyplot as plt
 
-    from khuri.tests.test_omnes import omnes_function
+    from khuri import madrid, phases, omnes
 
-    o = omnes_function()
+
+    THRESHOLD = (2.0 * madrid.PION_MASS)**2 + 1e-6
+
+
+    @phases.asymptotic1(matching_point=1200**2)
+    def phase(s):
+        return madrid.phase(s)
+
+
+    omnes_function = omnes.Omnes(phase, threshold=THRESHOLD, constant=np.pi,
+                                 cut=1e10)
 
     energies = np.linspace(0, 1200, 200)
-    omnes_values = o(energies**2)
+    omnes_values = omnes_function(energies**2)
 
     plt.title('The Omnes function of the Madrid p-wave')
     plt.plot(energies, np.real(omnes_values), label='Re')

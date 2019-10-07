@@ -48,17 +48,21 @@ def second_sheet_from_first(amplitude):
     return second
 
 
+def arccot2(x):
+    return np.arctan2(1.0, x)
+
+
 def momentum(s):
     return np.sqrt(s) * rho(PION_MASS, s) / 2.0
 
 
-def omega(s, s0, alpha):
+def omega(s, s_0, alpha):
     """A conformal variable.
 
     Parameters
     ----------
     s: the Mandelstam variable s
-    s0: usually non-negative. Above s0, the conformal variable is complex.
+    s_0: usually non-negative. Above s_0, the conformal variable is complex.
     alpha: the center of the conformal expansion
     """
     sqrt_s = np.sqrt(s)
@@ -73,27 +77,38 @@ def omega_2(s, s_m, constant=2.0):
 
 
 
-## p-wave ##################################################################### 
+## p-wave #####################################################################
 
 
-P_WAVE_RHO_MASS_1 = 0.7752
+P_WAVE_RHO_MASS = 0.7752
 P_WAVE_CONFORMAL_COEFFICIENTS_1 = (0.97, 0.12, -0.18, 0.40, 1.65)
+P_WAVE_CONFORMAL_COEFFICIENTS_2 = (0.97, 0.11, -0.13, 0.47, 1.36)
 
 
-def p_wave_generate_cot_phase(rho_mass, conformal_coeff):
-    conformal_polynomial = Polynomial(conformal_poly_coeff)
+def p_wave_generate_cot_phase(rho_mass=P_WAVE_RHO_MASS,
+                              conformal_coeff=P_WAVE_CONFORMAL_COEFFICIENTS_1):
+    conformal_polynomial = Polynomial(conformal_coeff)
     rho2 = rho_mass**2
     pion = PION_MASS**3
-    s0 = 1.43**2
+    s_0 = 1.43**2
 
     def cot_phase(s):
-        conf = conformal_polynomial(omega(s, s0=s0, alpha=0.3))
+        conf = conformal_polynomial(omega(s, s_0=s_0, alpha=0.3))
         sqrt_s = np.sqrt(s)
         prefactor = sqrt_s * (rho2 - s) / 2 / momentum(s)**3
         remove_spurious = 2 * pion / rho2 / sqrt_s
         return prefactor * (remove_spurious + conf)
 
     return cot_phase
+
+
+def p_wave_inelasticity(s, k_0, s_e=1.12**2):
+    s = np.asarray(s)
+
+    def above(x):
+        return 1.0 - k_0 * (1.0 - x / s_e)**2
+
+    return np.piecewise(s, [s < s_e, s >= s_e], [1, above])
 
 
 

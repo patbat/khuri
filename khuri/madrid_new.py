@@ -149,18 +149,19 @@ def p_wave_extend_phase(d_0, d_1, s_m=S_MATCHING):
     return wrapper
 
 
-def p_wave_generate_phase(conformal_coeff, d_0, d_1,
+def generate_p_wave(conformal_coeff, d_0, d_1,
                           rho_mass=P_WAVE_RHO_MASS,
                           s_m=S_MATCHING):
     cot_phase = p_wave_generate_cot_phase(conformal_coeff, rho_mass=rho_mass)
 
-    def low_energy_phase(s):
+    @p_wave_extend_phase(d_0, d_1, s_m=s_m)
+    def phase(s):
         return arccot2(cot_phase(s))
 
-    return p_wave_extend_phase(d_0, d_1, s_m=s_m)(low_energy_phase)
+    return phase, amplitude_from_cot(cot_phase)
 
 
-p_wave_phase = p_wave_generate_phase(
+p_wave_phase, p_wave = generate_p_wave(
                     conformal_coeff=P_WAVE_CONFORMAL_COEFFICIENTS_2,
                     d_0=P_WAVE_D_0_2, d_1=P_WAVE_D_1_2)
 

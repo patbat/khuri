@@ -22,25 +22,15 @@ def real_axis():
     return np.linspace(THRESHOLD, 1.4**2, 100)
 
 
-def test_p_wave_schwarz(vertical_line):
-    schwarz(mg.p_wave, vertical_line)
+@pytest.mark.parametrize('function',
+                         [mg.p_wave, mg.p_wave_2, mg.s_wave, mg.s_wave_2],
+                         ids=['p_wave', 'p_wave_2', 's_wave', 's_wave_2'])
+def test_schwarz(function, vertical_line):
+    schwarz(function, vertical_line)
 
 
-def test_p_wave_second_sheet_schwarz(vertical_line):
-    schwarz(mg.p_wave_2, vertical_line)
-
-
-def test_p_wave_connected(real_axis):
-    connected(mg.p_wave, mg.p_wave_2, real_axis)
-
-
-def test_s_wave_schwarz(vertical_line):
-    schwarz(mg.s_wave, vertical_line)
-
-
-def test_s_wave_second_sheet_schwarz(vertical_line):
-    schwarz(mg.s_wave_2, vertical_line)
-
-
-def test_s_wave_connected(real_axis):
-    connected(mg.s_wave, mg.s_wave_2, real_axis)
+@pytest.mark.parametrize('first, second',
+                         [(mg.p_wave, mg.p_wave_2), (mg.s_wave, mg.s_wave_2)],
+                         ids=['p_wave', 's_wave'])
+def test_connected(first, second, real_axis):
+    connected(first, second, real_axis)

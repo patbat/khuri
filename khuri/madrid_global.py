@@ -11,6 +11,8 @@ s0-wave and the p-wave from
 Along the real axis the parametrizations are valid up to 2 GeV.
 The p-wave amplitude below 1.12 GeV is holomorphic and hence valid in the
 complex plane, the same holds true for the s-wave amplitude below 1.4 GeV.
+However, above the 2-Kaon-threshold the s-wave has additional sheets, so the
+first and second are not longer continuously connected.
 
 The notation
 from the aforementioned paper is used in the implementation. The values for
@@ -134,7 +136,7 @@ def generate_conformal_amplitude(conformal_coeff, adler):
         conf = conformal_polynomial(omega(s, s_0=s_0, alpha=1))
         prefactor = PION_MASS**2 / (s - 0.5 * a2)
         psi = prefactor * (a2 / PION_MASS / csqrt(s) + conf)
-        return 1 / (psi - 1j * rho(PION_MASS, s))
+        return 1.0 / (psi - 1j * rho(PION_MASS, s))
 
     return conformal_amplitude
 
@@ -219,13 +221,13 @@ def generate_s_wave(conformal_coeff, adler, f_0_coefficients, f_0_pole):
             inelasticity)
 
 
-(s_phase,
+(s_wave_phase,
  s_wave,
  s_wave_2,
- s_inelasticity) = generate_s_wave(S_WAVE_CONFORMAL_COEFFICIENTS_2,
-                                   S_WAVE_ADLER_2,
-                                   S_WAVE_F_0_COEFFICIENTS_2,
-                                   S_WAVE_F_0_POLE)
+ s_wave_inelasticity) = generate_s_wave(S_WAVE_CONFORMAL_COEFFICIENTS_2,
+                                        S_WAVE_ADLER_2,
+                                        S_WAVE_F_0_COEFFICIENTS_2,
+                                        S_WAVE_F_0_POLE)
 
 
 

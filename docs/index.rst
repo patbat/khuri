@@ -48,6 +48,16 @@ To check whether the install was successful, try the following::
 
 If everything works fine, several tests should run successfully.
 
+Conventions
+===========
+
+Throughout the code, the following conventions apply:
+
+* parameters like thresholds etc. are given in units of Mandelstam variables
+* whenever an explicit choice of units is necessary (e.g. for the default
+  parameters of phase parametrizations by the Madrid group), (powers of) GeV
+  are used
+
 First steps
 ===========
 
@@ -79,6 +89,6 @@ plot of the Omnes function of the Madrid p-wave:
     plt.title('The Omnes function of the Madrid p-wave')
     plt.plot(energies, np.real(omnes_values), label='Re')
     plt.plot(energies, np.imag(omnes_values), label='Im')
-    plt.xlabel('E/MeV')
+    plt.xlabel('E/GeV')
     plt.legend()
     plt.show()

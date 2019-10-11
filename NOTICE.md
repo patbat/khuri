@@ -1,3 +1,8 @@
+How to cite this project
+========================
+
+Please have a look at the CITATION file.
+
 List of scientific papers etc. that are relevant for this project
 =================================================================
 

@@ -22,6 +22,5 @@ target_link_libraries(_khuri_gsl PRIVATE gsl gslcblas)
 pybind11_add_module(_khuri_omnes
     "${SOURCE_DIR}/cauchy.cpp"
     "${SOURCE_DIR}/gsl_interface.cpp"
-    "${SOURCE_DIR}/omnes.cpp"
     "${BINDING_DIR}/omnes_bindings.cpp")
 target_link_libraries(_khuri_omnes PRIVATE gsl gslcblas)

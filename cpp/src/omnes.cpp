@@ -2,7 +2,7 @@
 
 namespace omnes {
 double derivative_0(const gsl::Function& phase, double threshold, double cut,
-        double constant, gsl::Integration& integrate)
+        double constant, const gsl::Integration& integrate)
     // Return the derivative of the Omnes function at s=0. The parameters are
     // the same as the ones with the same name in the constructor of
     // `class Omnes`.

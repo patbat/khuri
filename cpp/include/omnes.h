@@ -49,12 +49,12 @@ public:
     double derivative_at_zero() const noexcept {return derivative;}
         ///< Return the derivative of the Omnes function at the origin.
 private:
-    gsl::Function phase_below; // phase below `cut`
-    double constant;
-    double threshold;
-    double cut;
-    double minimal_distance;
-    gsl::Cquad integrate;
+    const gsl::Function phase_below; // phase below `cut`
+    const double constant;
+    const double threshold;
+    const double cut;
+    const double minimal_distance;
+    const gsl::Cquad integrate;
     const double derivative;
 
     std::complex<double> upper(const std::complex<double>& s) const;

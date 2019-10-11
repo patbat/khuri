@@ -13,7 +13,7 @@ using gsl::Settings;
 PYBIND11_MODULE(_khuri_omnes, m) {
     m.doc() = "The Omnes function.";
 
-    py::class_<Omnes<>>(m, "Omnes")
+    py::class_<Omnes<gsl::Cquad>>(m, "OmnesCquad")
         .def(py::init<const Function&, double, double, Settings>(),
              py::arg("phase"),
              py::arg("threshold"),
@@ -27,6 +27,23 @@ PYBIND11_MODULE(_khuri_omnes, m) {
              py::arg("cut"),
              py::arg("minimal_distance") = 1e-10,
              py::arg("config") = Settings{})
-        .def("__call__", py::vectorize(&Omnes<>::operator()),
+        .def("__call__", py::vectorize(&Omnes<gsl::Cquad>::operator()),
+                py::arg("s"));
+
+    py::class_<Omnes<gsl::Qag>>(m, "OmnesQag")
+        .def(py::init<const Function&, double, double, Settings>(),
+             py::arg("phase"),
+             py::arg("threshold"),
+             py::arg("minimal_distance") = 1e-10,
+             py::arg("config") = Settings{})
+        .def(py::init<const Function&, double, double, double, double,
+                      Settings>(),
+             py::arg("phase"),
+             py::arg("threshold"),
+             py::arg("constant"),
+             py::arg("cut"),
+             py::arg("minimal_distance") = 1e-10,
+             py::arg("config") = Settings{})
+        .def("__call__", py::vectorize(&Omnes<gsl::Qag>::operator()),
                 py::arg("s"));
 }

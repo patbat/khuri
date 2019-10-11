@@ -80,8 +80,8 @@ plot of the Omnes function of the Madrid p-wave:
         return madrid.phase(s)
 
 
-    omnes_function = omnes.Omnes(phase, threshold=THRESHOLD, constant=np.pi,
-                                 cut=1e10)
+    omnes_function = omnes.generate_omnes(phase, threshold=THRESHOLD,
+                                          constant=np.pi, cut=1e10)
 
     energies = np.linspace(0, 1.2, 200)
     omnes_values = omnes_function(energies**2)

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from khuri.omnes import Omnes
+from khuri.omnes import generate_omnes
 from khuri import madrid
 from khuri.tests.helpers import schwarz
 from khuri.tests.test_phases import phase
@@ -14,12 +14,12 @@ THRESHOLD = (2.0 * madrid.PION_MASS)**2 + 1e-6
 
 @pytest.fixture
 def omnes_function():
-    return Omnes(phase, threshold=THRESHOLD, constant=np.pi, cut=1e10)
+    return generate_omnes(phase, threshold=THRESHOLD, constant=np.pi, cut=1e10)
 
 
 @pytest.fixture
 def omnes_function_alt():
-    return Omnes(phase, threshold=THRESHOLD)
+    return generate_omnes(phase, threshold=THRESHOLD)
 
 
 def test_omnes_at_zero(omnes_function, omnes_function_alt):

@@ -15,6 +15,9 @@ The aim of this project is to develop a general solver for Khuri-Treiman
 equations including facilities that are of general use when dealing with
 dispersion relations, e.g. Omnes function(s).
 
+.. contents::
+   :local:
+
 Installation
 ============
 
@@ -69,15 +72,15 @@ plot of the Omnes function of the Madrid p-wave:
     import numpy as np
     import matplotlib.pyplot as plt
 
-    from khuri import madrid, phases, omnes
+    from khuri import madrid_global, phases, omnes
 
 
-    THRESHOLD = (2.0 * madrid.PION_MASS)**2 + 1e-6
+    THRESHOLD = (2.0 * madrid_global.PION_MASS)**2
 
 
-    @phases.asymptotic1(matching_point=1.2**2)
+    @phases.asymptotic1(matching_point=1.12**2)
     def phase(s):
-        return madrid.phase(s)
+        return madrid_global.p_wave_phase(s)
 
 
     omnes_function = omnes.generate_omnes(phase, threshold=THRESHOLD,

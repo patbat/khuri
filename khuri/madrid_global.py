@@ -59,7 +59,8 @@ def second_sheet_from_first(amplitude):
 
 
 def arccot2(x):
-    return np.arctan2(1.0, x)
+    """The arccot for real arguments."""
+    return np.arctan2(1.0, np.real(x))
 
 
 @np.vectorize
@@ -199,10 +200,11 @@ def generate_s_wave(conformal_coeff, adler, f_0_coefficients, f_0_pole):
 
     if boundary is None:
         def increasing_phase(s):
+            s = s.real
             return phase(s)
     else:
         def increasing_phase(s):
-            s = np.asarray(s)
+            s = np.asarray(s).real
             shift = np.pi
             return np.piecewise(s,
                                 [s < boundary, s >= boundary],
@@ -299,7 +301,7 @@ def generate_p_wave(conformal_coeff, d_0, d_1,
                     s_m=S_MATCHING):
     cot_phase = p_wave_generate_cot_phase(conformal_coeff, rho_mass=rho_mass)
 
-    @p_wave_extend_phase(d_0, d_1, s_m=s_m)
+    # @p_wave_extend_phase(d_0, d_1, s_m=s_m)
     def phase(s):
         return arccot2(cot_phase(s))
 

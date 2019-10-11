@@ -65,7 +65,7 @@ plot of the Omnes function of the Madrid p-wave:
     THRESHOLD = (2.0 * madrid.PION_MASS)**2 + 1e-6
 
 
-    @phases.asymptotic1(matching_point=1200**2)
+    @phases.asymptotic1(matching_point=1.2**2)
     def phase(s):
         return madrid.phase(s)
 
@@ -73,12 +73,12 @@ plot of the Omnes function of the Madrid p-wave:
     omnes_function = omnes.Omnes(phase, threshold=THRESHOLD, constant=np.pi,
                                  cut=1e10)
 
-    energies = np.linspace(0, 1200, 200)
+    energies = np.linspace(0, 1.2, 200)
     omnes_values = omnes_function(energies**2)
 
     plt.title('The Omnes function of the Madrid p-wave')
     plt.plot(energies, np.real(omnes_values), label='Re')
     plt.plot(energies, np.imag(omnes_values), label='Im')
-    plt.xlabel("E/MeV")
+    plt.xlabel('E/MeV')
     plt.legend()
     plt.show()

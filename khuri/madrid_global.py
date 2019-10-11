@@ -33,7 +33,7 @@ from khuri.phase_space import rho
 
 
 PION_MASS = 0.13957 # in GeV
-KAON_MASS = 0.496 # in MeV
+KAON_MASS = 0.496 # in GeV
 S_MATCHING = 1.4**2 # in GeV
 
 

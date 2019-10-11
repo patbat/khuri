@@ -5,7 +5,7 @@ import khuri.madrid
 import khuri.phases
 
 
-MATCHING_POINT = 1200**2
+MATCHING_POINT = 1.2**2
 
 
 @khuri.phases.asymptotic1(matching_point=MATCHING_POINT)
@@ -20,7 +20,7 @@ class TestAsymptotic1:
 
     def test_agreement(self):
         """Test agreement with the original phase."""
-        values = np.linspace(300**2, MATCHING_POINT - 10, 500)
+        values = np.linspace(0.3**2, MATCHING_POINT - 0.01, 500)
         original = khuri.madrid.phase(values)
         wrapper = phase(values)
         assert np.all(original == wrapper)

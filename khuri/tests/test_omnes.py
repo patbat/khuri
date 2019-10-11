@@ -29,7 +29,7 @@ def test_omnes_at_zero(omnes_function, omnes_function_alt):
 
 def test_phase(omnes_function):
     """Check if the phase of the Omnes function agrees with the input phase."""
-    mandelstam_s = np.linspace(THRESHOLD, 1400, 20)**2
+    mandelstam_s = np.linspace(THRESHOLD, 1.4**2, 20)
     omnes_phase = np.angle(omnes_function(mandelstam_s))
     phase_values = phase(mandelstam_s)
     assert np.allclose(omnes_phase, phase_values)
@@ -37,7 +37,7 @@ def test_phase(omnes_function):
 
 def test_schwarz(omnes_function):
     """Check if the Omnes function fulfills the Schwarz reflection princple."""
-    real_part = 760**2
+    real_part = 0.760**2
     imaginary_parts = np.linspace(-1e4, 1e4, 20)
     mandelstam_s = real_part + 1j * imaginary_parts
     schwarz(omnes_function, mandelstam_s)

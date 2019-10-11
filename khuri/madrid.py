@@ -6,7 +6,7 @@ The I=J=1 pi pi->pi pi Madrid partial wave parametrization
 The phrase "physical units", which is used several times in the documentation,
 refers to a consistent choice of units (e.g. all
 masses and energies etc. expressed in MeV or everything expressed in powers of
-GeV).
+GeV). The default choice is GeV.
 """
 import numpy as np
 
@@ -23,18 +23,18 @@ B1_UFD = 0.15
 LAMBDA1_UFD = 1.57
 LAMBDA2_UFD = -1.96
 
-S0 = 1050.0**2 # in (MeV)^2
+S0 = 1.05**2 # in (GeV)^2
 
 # The masses are parameters that determine the shape of the phase.
 # They are not necessarily the physical masses of the particles.
-KAON_MASS = 496.0 # in MeV
-RHO_MASS = 773.6 # in MeV
-PION_MASS = 139.57 # in MeV
+KAON_MASS = 0.496 # in GeV
+RHO_MASS = 0.7736 # in GeV
+PION_MASS = 0.13957 # in GeV
 
 # The parametrization is not valid for energies below LOWEST
 # or above HIGHEST.
-LOWEST = 2.0*PION_MASS # in MeV
-HIGHEST = 1420 # in MeV
+LOWEST = 2.0*PION_MASS # in GeV
+HIGHEST = 1.42 # in GeV
 
 
 def _momentum(s, m):
@@ -59,7 +59,7 @@ def _w(s, s0=S0):
         the squared cm energy in physical units
     s0: number, optional
         parameter, needs to have the same units as s
-        (default value is given in MeV^2)
+        (default value is given in GeV^2)
     """
     a = np.sqrt(s)
     b = np.sqrt(s0 - s)
@@ -83,7 +83,7 @@ def phase_low(s, m_pi, m_rho, b0, b1, s0=S0):
         a parameter determined by fits
     s0: number, optional
         parameter, needs to have the same units as s
-        (default value is given in MeV^2)
+        (default value is given in GeV^2)
     """
     en = np.sqrt(s)
     coeff = en * (m_rho**2-s) / (2*_momentum(s, m_pi)**3)
@@ -92,7 +92,7 @@ def phase_low(s, m_pi, m_rho, b0, b1, s0=S0):
 
 
 def phase_high(s, m_k, lambda_0, lambda_1, lambda_2):
-    """Calculate the phase for (1420 MeV)^2 > s > 4m_K^2
+    """Calculate the phase for (1420 GeV)^2 > s > 4m_K^2
 
     Parameters
     ----------
@@ -149,7 +149,7 @@ def phase(
         a parameter determined by fits
     s0: number, optional
         parameter, needs to have the same units as s
-        (default value is given in MeV^2)
+        (default value is given in GeV^2)
     """
     if s < LOWEST**2:
         raise ValueError(f'{s} is below threshold')

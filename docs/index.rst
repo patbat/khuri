@@ -52,6 +52,13 @@ To check whether the install was successful, try the following::
 
 If everything works fine, several tests should run successfully.
 
+To build the documentation for offline access (optional), go to ``khuri/docs``.
+Subsequently enter::
+
+   make html
+
+Then open the file ``khuri/docs/_build/html/index.html`` in a web browser.
+
 Conventions
 ===========
 

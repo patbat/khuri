@@ -30,6 +30,7 @@ To use this software, you need to have
 * a compiler that supports c++14
 * the `GNU scientific library <https://www.gnu.org/software/gsl/>`_ (version
   2.1 or newer)
+* the `Eigen library <http://eigen.tuxfamily.org>`_
 * python (version 3.7.1 or newer) as well as
   standard python packages (numpy, scipy, setuptools, pytest), as
   provided e.g. via a standard installation of

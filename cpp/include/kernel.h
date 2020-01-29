@@ -15,6 +15,7 @@
 #include <iterator>
 #include <limits>
 #include <numeric>
+#include <optional>
 #include <stdexcept>
 
 /// @brief Solve KT equations via modified Gasser-Rusetsky method.
@@ -177,7 +178,7 @@ template<typename T>
 std::vector<Vector> basis(const omnes::Omnes& o, const Function& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::inverse,
-        boost::optional<double> accuracy=boost::none)
+        std::optional<double> accuracy=std::nullopt)
     /// @brief Compute the set of basis vectors for a given KT problem.
     ///
     /// @param o the Omnes function
@@ -226,7 +227,7 @@ public:
     Basis(const omnes::Omnes& o, const Function& pi_pi, int subtractions,
         const Grid<T>& g, double pion_mass, double virtuality,
         Method method=Method::inverse,
-        boost::optional<double> accuracy=boost::none);
+        std::optional<double> accuracy=std::nullopt);
         ///< @param o the Omnes function
         ///< @param pi_pi the pion pion scattering amplitude
         ///< @param subtraction the number of subtractions
@@ -258,7 +259,7 @@ template<typename T>
 Basis<T> make_basis(const omnes::Omnes& o, const Function& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::iteration,
-        boost::optional<double> accuracy=boost::none)
+        std::optional<double> accuracy=std::nullopt)
     /// @brief Generate a basis of the solution space to a KT equation.
     ///
     /// The arguments match exactly those of the class `Basis`.
@@ -323,7 +324,7 @@ std::vector<cauchy::Interpolate> basis_integrands(const omnes::Omnes& o,
 template<typename T>
 Basis<T>::Basis(const omnes::Omnes& o, const Function& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
-        double virtuality, Method method, boost::optional<double> accuracy)
+        double virtuality, Method method, std::optional<double> accuracy)
     :
     _basis{basis(o,pi_pi,subtractions,g,pion_mass,virtuality,method,accuracy)},
     o{o},

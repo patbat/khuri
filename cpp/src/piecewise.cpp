@@ -74,7 +74,7 @@ Piecewise::Segment Piecewise::hits(const Complex& s) const
     auto position{std::find_if(adjacent.cbegin(),adjacent.cend(),
             [s](const auto& p){return in_between(s,p.first,p.second);})};
     if (position==adjacent.cend())
-        return boost::none;
+        return std::nullopt;
     double lower = std::distance(adjacent.cbegin(),position);
     double upper{lower+1.0};
     return std::make_pair(lower,upper);

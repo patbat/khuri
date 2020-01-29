@@ -3,11 +3,10 @@
 
 #include "gsl_interface.h"
 
-#include "boost/optional.hpp"
-
 #include <algorithm>
 #include <complex>
 #include <iterator>
+#include <optional>
 #include <tuple>
 #include <type_traits>
 #include <utility>
@@ -93,7 +92,7 @@ struct Point {
 struct Curve {
     /// @brief The pair represents the lowest and highest value of a variable
     /// parametrising a curve.
-    using Segment = boost::optional<std::pair<double,double>>;
+    using Segment = std::optional<std::pair<double,double>>;
 
     virtual Complex curve_func(double x) const=0;
         ///< Evaluate the curve at `x`.

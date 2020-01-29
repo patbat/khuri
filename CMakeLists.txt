@@ -4,6 +4,8 @@ project(khuri)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Eigen3 REQUIRED NO_MODULE)
+
 add_definitions(-Wall -pedantic -O3)
 
 set(SOURCE_DIR "./cpp/src")
@@ -24,3 +26,13 @@ pybind11_add_module(_khuri_omnes
     "${SOURCE_DIR}/gsl_interface.cpp"
     "${BINDING_DIR}/omnes_bindings.cpp")
 target_link_libraries(_khuri_omnes PRIVATE gsl gslcblas)
+
+pybind11_add_module(_khuri_khuri_treiman
+    "${SOURCE_DIR}/cauchy.cpp"
+    "${SOURCE_DIR}/grid.cpp"
+    "${SOURCE_DIR}/gsl_interface.cpp"
+    "${SOURCE_DIR}/kernel.cpp"
+    "${SOURCE_DIR}/mandelstam.cpp"
+    "${SOURCE_DIR}/piecewise.cpp"
+    "${BINDING_DIR}/khuri_treiman_bindings.cpp")
+target_link_libraries(_khuri_khuri_treiman PRIVATE gsl gslcblas Eigen3::Eigen)

@@ -27,7 +27,7 @@ Requirements
 To use this software, you need to have
 
 * `cmake <https://cmake.org/>`_ (version 3.5 or newer)
-* a compiler that supports c++14
+* a compiler that supports c++17
 * the `GNU scientific library <https://www.gnu.org/software/gsl/>`_ (version
   2.1 or newer)
 * the `Eigen library <http://eigen.tuxfamily.org>`_

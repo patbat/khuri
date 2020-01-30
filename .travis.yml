@@ -1,6 +1,7 @@
 before_install:
     - sudo apt update -q
     - sudo apt install libgsl-dev
+    - sudo apt install libeigen3-dev
 matrix:
     include:
         # direct tests of facilities written in c++

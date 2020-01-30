@@ -1,7 +1,9 @@
-#include "pybind11/pybind11.h"
 #include "khuri_treiman.h"
 
+#include "pybind11/pybind11.h"
+
 namespace py = pybind11;
+using khuri_treiman::Complex;
 using khuri_treiman::Piecewise;
 
 PYBIND11_MODULE(_khuri_khuri_treiman, m) {

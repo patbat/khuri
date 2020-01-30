@@ -3,6 +3,7 @@
 
 #include "phase_space.h"
 #include "facilities.h"
+#include "type_aliases.h"
 
 #include <cmath>
 #include <complex>
@@ -13,7 +14,7 @@
 namespace mandelstam {
 using phase_space::sigma;
 using phase_space::rho;
-using Complex = std::complex<double>;
+using type_aliases::Complex;
 using namespace std::complex_literals;
 using facilities::square;
 

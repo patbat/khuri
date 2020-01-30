@@ -1,10 +1,11 @@
 #ifndef TEST_COMMON_H
 #define TEST_COMMON_H
 
-#include <complex>
+#include "type_aliases.h"
+
 #include "gtest/gtest.h"
 
-using Complex = std::complex<double>;
+using type_aliases::Complex;
 
 void expect_near(const Complex& z1, const Complex& z2, double tolerance=1e-16)
 {

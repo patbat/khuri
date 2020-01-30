@@ -2,11 +2,13 @@
 #define PHASE_SPACE_H
 
 #include "facilities.h"
+#include "type_aliases.h"
+
 #include <complex>
 
 /// @brief Different versions of the two-particle phase space.
 namespace phase_space {
-using Complex = std::complex<double>;
+using type_aliases::Complex;
 using facilities::square;
 
 inline Complex signum_im(const Complex& x)

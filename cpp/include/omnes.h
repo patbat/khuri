@@ -17,6 +17,11 @@
 namespace omnes {
 /// The Omnes function for arbitrary phases and thresholds.
 template<typename Integrate=gsl::Cquad>
+class Omnes;
+
+using OmnesF = Omnes<>;
+
+template<typename Integrate>
 class Omnes {
 public:
     Omnes(const gsl::Function& phase, double threshold,
@@ -107,7 +112,7 @@ Omnes<T>::Omnes(const gsl::Function& phase, double threshold,
 template<typename T>
 Omnes<T>::Omnes(const gsl::Function& phase, double threshold, double constant,
         double cut, double minimal_distance, gsl::Settings config)
-: phase_below{phase}, threshold{threshold}, constant{constant}, cut{cut},
+: phase_below{phase}, constant{constant}, threshold{threshold}, cut{cut},
     minimal_distance{minimal_distance},
     integrate{config},
     derivative{derivative_0(phase,threshold,cut,constant,integrate)}

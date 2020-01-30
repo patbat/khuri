@@ -3,6 +3,7 @@
 
 #include "facilities.h"
 #include "gsl_interface.h"
+#include "type_aliases.h"
 
 #include <algorithm>
 #include <complex>
@@ -13,7 +14,7 @@
 
 /// Facilities for dealing with complex valued functions.
 namespace cauchy {
-using Complex = std::complex<double>;
+using type_aliases::Complex;
 using Curve = std::function<Complex(double)>;
 using Complex_function = std::function<Complex(const Complex&)>;
 using gsl::Interval;

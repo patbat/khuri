@@ -2,6 +2,7 @@
 #define KERNEL_GRID_H
 
 #include "gsl_interface.h"
+#include "type_aliases.h"
 
 #include <algorithm>
 #include <complex>
@@ -23,7 +24,7 @@
 /// This header contains general facilites to compute such a grid, the most
 /// import is the class `Grid`.
 namespace grid {
-using Complex = std::complex<double>;
+using type_aliases::Complex;
 
 /// (point,weight) pair
 using Knot = std::pair<double,double>;

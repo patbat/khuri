@@ -12,7 +12,7 @@ set(SOURCE_DIR "./cpp/src")
 set(INCLUDE_DIR "./cpp/include")
 set(BINDING_DIR "./khuri/bindings")
 
-include_directories(${INCLUDE_DIR})
+include_directories(${EIGEN3_INCLUDE_DIRS} ${INCLUDE_DIR})
 
 add_subdirectory(lib/pybind11)
 

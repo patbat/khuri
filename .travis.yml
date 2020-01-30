@@ -1,16 +1,19 @@
-before_install:
-    - sudo apt update -q
-    - sudo apt install libgsl-dev
-    - sudo apt install libeigen3-dev
 matrix:
     include:
+        - os: linux
+          dist: bionic
+          addons:
+              apt:
+                  sources:
+                      - ubuntu-toolchain-r-test
+                  packages:
+                      - g++-8
+          env:
+              - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
         # direct tests of facilities written in c++
         - language: cpp
           compiler:
               - gcc
-              - clang
-          os: linux
-          dist: bionic
           script:
               - mkdir ./cpp/tests/build
               - cd ./cpp/tests/build
@@ -27,3 +30,8 @@ matrix:
           script:
               - cd khuri/tests/
               - pytest
+before_install:
+    - eval "${MATRIX_EVAL}"
+    - sudo apt update -q
+    - sudo apt install libgsl-dev
+    - sudo apt install libeigen3-dev

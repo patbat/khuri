@@ -27,7 +27,9 @@ PYBIND11_MODULE(_khuri_khuri_treiman, m) {
              py::arg("x"))
         .def("boundaries", &Curve::boundaries);
 
-    py::class_<Piecewise, Curve> piecewise(m, "Piecewise");
+    py::class_<Piecewise, Curve> piecewise(m, "Piecewise",
+                                           "a piecewise linear path in the"
+                                           " complex plane");
     piecewise
         .def(py::init<const std::vector<Complex>&,
                       const std::vector<Piecewise::Para>&>())
@@ -46,4 +48,20 @@ PYBIND11_MODULE(_khuri_khuri_treiman, m) {
         .value("linear", Piecewise::Para::linear)
         .value("quadratic", Piecewise::Para::quadratic)
         .export_values();
+
+    py::class_<khuri_treiman::Real, Piecewise>(m, "Real",
+                                            "linear curve along the real axis")
+        .def(py::init<double, double>());
+
+    py::class_<khuri_treiman::Vector_decay, Piecewise>(m, "Vector_decay",
+                                            "curve for the decay as described"
+                                            " in the paper by Gasser and"
+                                            " Rusetsky")
+        .def(py::init<double, double, double>());
+
+    py::class_<khuri_treiman::Adaptive, Piecewise>(m, "Adaptive",
+                                            "curve for arbitrary virtualities"
+                                            " above the three-pion threshold"
+                                            " and arbitrary pion masses")
+        .def(py::init<double, double, double>());
 }

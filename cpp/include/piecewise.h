@@ -16,7 +16,7 @@ using grid::Complex;
 using grid::Curve;
 
 /// a piecewise linear path in the complex plane
-class Piecewise : Curve {
+class Piecewise : public Curve {
 public:
     /// the different available parametrisations
     enum Para {

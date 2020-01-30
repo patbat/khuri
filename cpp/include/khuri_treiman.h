@@ -10,6 +10,7 @@
 ///
 /// The equations are solved via the modified Gasser-Rusetsky method.
 namespace khuri_treiman {
+using grid::Curve;
 using grid::make_grid;
 
 using piecewise::Piecewise;

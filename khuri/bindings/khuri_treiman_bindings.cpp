@@ -6,11 +6,13 @@
 #include "pybind11/stl.h"
 
 #include <vector>
+#include <tuple>
 #include <type_traits>
 
 namespace py = pybind11;
 using khuri_treiman::Complex;
 using khuri_treiman::Curve;
+using khuri_treiman::Point;
 using khuri_treiman::Grid;
 using khuri_treiman::Piecewise;
 
@@ -100,6 +102,16 @@ PYBIND11_MODULE(_khuri_khuri_treiman, m) {
                                             " above the three-pion threshold"
                                             " and arbitrary pion masses")
         .def(py::init<double, double, double>());
+
+    py::class_<Point>(m, "Point",
+                      "A point in the (x,z)-plane.")
+        .def(py::init<Complex,double,Complex,double,double>())
+        .def(py::init<std::tuple<Complex,double,Complex,double,double>>())
+        .def_readwrite("x", &Point::x)
+        .def_readwrite("x_weight", &Point::x_weight)
+        .def_readwrite("x_derivative", &Point::x_derivative)
+        .def_readwrite("z", &Point::z)
+        .def_readwrite("z_weight", &Point::z_weight);
 
     create_grid_binding<khuri_treiman::Real>(m, "Real");
     create_grid_binding<khuri_treiman::Vector_decay>(m, "Vector_decay");

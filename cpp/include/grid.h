@@ -82,6 +82,18 @@ auto knots_along_piecewise_curve(std::vector<double> boundaries,
 
 /// A point in the (x,z)-plane.
 struct Point {
+    constexpr Point(const Complex& x, double x_weight,
+            const Complex& x_derivative, double z, double z_weight)
+        : x{x}, x_weight{x_weight}, x_derivative{x_derivative}, z{z},
+        z_weight{z_weight} {}
+
+    constexpr Point(const std::tuple<Complex,double,Complex,double,double>& t)
+        : x{std::get<0>(t)},
+        x_weight{std::get<1>(t)},
+        x_derivative{std::get<2>(t)},
+        z{std::get<3>(t)},
+        z_weight{std::get<4>(t)} {}
+
     Complex x;
     double x_weight;
     Complex x_derivative;

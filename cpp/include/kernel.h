@@ -440,7 +440,7 @@ std::vector<std::pair<T,T>> segments_without(const std::vector<T>& points,
 template<typename T>
 Complex Basis<T>::operator()(std::size_t i, const Complex& s) const
 {
-    const auto& integrand{integrands[i]};
+    const auto& integrand{integrands.at(i)};
     Complex dispersive_integral;
     if (hits_threshold(pion_mass,s)) // TODO: improve the handling of this case
         dispersive_integral = std::numeric_limits<double>::quiet_NaN();

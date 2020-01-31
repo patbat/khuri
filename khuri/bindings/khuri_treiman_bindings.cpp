@@ -1,4 +1,5 @@
 #include "khuri_treiman.h"
+#include <omnes.h>
 
 #include "pybind11/pybind11.h"
 #include "pybind11/complex.h"
@@ -10,11 +11,15 @@
 #include <type_traits>
 
 namespace py = pybind11;
+
+using khuri_treiman::Basis;
 using khuri_treiman::Complex;
 using khuri_treiman::Curve;
-using khuri_treiman::Point;
+using khuri_treiman::Function;
 using khuri_treiman::Grid;
+using khuri_treiman::Method;
 using khuri_treiman::Piecewise;
+using khuri_treiman::Point;
 
 template<typename T>
 void create_grid_binding(py::module& m, const std::string& type_name)
@@ -46,6 +51,61 @@ void create_grid_binding(py::module& m, const std::string& type_name)
         .def("z_size", &G::z_size)
         .def("x_parameter_lower", &G::x_parameter_lower)
         .def("x_parameter_upper", &G::x_parameter_upper);
+}
+
+template<typename T>
+void create_basis_binding(py::module& m, const std::string& type_name)
+{
+    using B = Basis<T>;
+    using G = Grid<T>;
+    const std::string name = "Basis" + type_name;
+    const std::string init_docstring =
+        "Parameters\n"
+        "----------\n"
+        "o: the Omnes function\n"
+        "pi_pi: the pion pion scattering amplitude\n"
+        "subtraction: the number of subtractions\n"
+        "g: the grid on which the integrands of the KT equations are sampled\n"
+        "pion_mass: the pion mass\n"
+        "virtuality: the 'mass' squared of the I=0, J=1, P=C=-1"
+        " particle. Might take on arbitrary values (i.e. 0 and negative"
+        " values are alowed, too).\n"
+        "method: determine whether equations are solved iteratively"
+        " or via direct matrix inversion\n"
+        "accuracy: allows to tune the accuracy of the solution if"
+        " iteration is used.";
+    const std::string call_docstring =
+         "Evaluate the basis function with subtraction polynomial s^`i` at `s`";
+    py::class_<B>(m, name.c_str())
+        .def(py::init<const omnes::OmnesF&,
+                      const Function&,
+                      int,
+                      const G&,
+                      double,
+                      double,
+                      Method,
+                      std::optional<double>>(),
+             init_docstring.c_str(),
+             py::arg("o"),
+             py::arg("pi_pi"),
+             py::arg("subtractions"),
+             py::arg("g"),
+             py::arg("pion_mass"),
+             py::arg("virtuality"),
+             py::arg("method")=Method::inverse,
+             py::arg("accuracy")=std::nullopt)
+        // .def("__call__", py::vectorize(&B::operator()),
+        .def("__call__", &B::operator(),
+             call_docstring.c_str(),
+             py::arg("i"),
+             py::arg("s"));
+}
+
+template<typename T>
+void create_bindings(py::module& m, const std::string& type_name)
+{
+    create_grid_binding<T>(m, type_name);
+    create_basis_binding<T>(m, type_name);
 }
 
 PYBIND11_MODULE(_khuri_khuri_treiman, m) {
@@ -87,11 +147,16 @@ PYBIND11_MODULE(_khuri_khuri_treiman, m) {
         .value("quadratic", Piecewise::Para::quadratic)
         .export_values();
 
+    py::enum_<Method>(m, "Method",
+                      "The different available solution methods.")
+        .value("iteration", Method::iteration)
+        .value("inverse", Method::inverse);
+
     py::class_<khuri_treiman::Real, Piecewise>(m, "Real",
                                             "linear curve along the real axis")
         .def(py::init<double, double>());
 
-    py::class_<khuri_treiman::Vector_decay, Piecewise>(m, "Vector_decay",
+    py::class_<khuri_treiman::Vector_decay, Piecewise>(m, "VectorDecay",
                                             "curve for the decay as described"
                                             " in the paper by Gasser and"
                                             " Rusetsky")
@@ -113,7 +178,7 @@ PYBIND11_MODULE(_khuri_khuri_treiman, m) {
         .def_readwrite("z", &Point::z)
         .def_readwrite("z_weight", &Point::z_weight);
 
-    create_grid_binding<khuri_treiman::Real>(m, "Real");
-    create_grid_binding<khuri_treiman::Vector_decay>(m, "Vector_decay");
-    create_grid_binding<khuri_treiman::Adaptive>(m, "Adaptive");
+    create_bindings<khuri_treiman::Real>(m, "Real");
+    create_bindings<khuri_treiman::Vector_decay>(m, "VectorDecay");
+    create_bindings<khuri_treiman::Adaptive>(m, "Adaptive");
 }

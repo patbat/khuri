@@ -21,8 +21,8 @@ using piecewise::Real;
 
 using kernel::Basis;
 using kernel::Complex;
-using kernel::threshold;
-using kernel::make_basis;
+using kernel::Function;
+using kernel::Method;
 } // khuri_treiman
 
 #endif // KHURI_TREIMAN_H

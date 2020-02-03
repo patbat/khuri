@@ -35,7 +35,7 @@ def asymptotic1(matching_point, limit=np.pi):
 
 def asymptotic2(lower, upper, limit=np.pi):
     """Return phase that equals `phase` below `lower` and `limit` above `upper`.
-    
+
     Between `lower` and `upper` there is a in [`lower`,`upper`) one
     times continuously differentiable smooth connection.
     """

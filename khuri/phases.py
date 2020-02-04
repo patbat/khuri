@@ -36,8 +36,14 @@ def asymptotic1(matching_point, limit=np.pi):
 def asymptotic2(lower, upper, limit=np.pi):
     """Return phase that equals `phase` below `lower` and `limit` above `upper`.
 
-    Between `lower` and `upper` there is a in [`lower`,`upper`) one
+    Between `lower` and `upper` there is a in [`lower`,`upper`] one
     times continuously differentiable smooth connection.
+
+    Note
+    ----
+    The matching is achieved using a third-order polynomial, which
+    requires to use also the phase as a part of the function in
+    [`lower`, `upper`].
     """
     def wrapper(phase):
         def continued_phase(s):
@@ -46,6 +52,42 @@ def asymptotic2(lower, upper, limit=np.pi):
             if s < upper:
                 c = _connect(lower, upper, s)
                 return (1.0 - c) * phase(s) + c * limit
+            return limit
+
+        return np.vectorize(continued_phase, doc=phase.__doc__)
+
+    return wrapper
+
+
+def asymptotic3(lower, upper, limit=np.pi):
+    """Return phase that equals `phase` below `lower` and `limit` above `upper`.
+
+    Between `lower` and `upper` there is a in [`lower`,`upper`] one
+    times continuously differentiable smooth connection.
+
+    Note
+    ----
+    The matching is achieved using a fourth-order polynomial, which might
+    lead to a huge bump in [`lower`, `upper`], depending on the input
+    parameters.
+    """
+    def wrapper(phase):
+        value = phase(lower)
+        d_value = derivative(phase, lower, dx=1e-6)
+        vector = np.array([value, limit, d_value, 0.0])
+        matrix = np.array([
+            [1.0, lower, lower**2, lower**3],
+            [1.0, upper, upper**2, upper**3],
+            [0.0, 1.0, 2.0 * lower, 3.0 * lower**2],
+            [0.0, 1.0, 2.0 * upper, 3.0 * upper**2],
+        ])
+        coefficients = np.linalg.inv(matrix) @ vector
+
+        def continued_phase(s):
+            if s < lower:
+                return phase(s)
+            if s < upper:
+                return coefficients @ np.array([1.0, s, s**2, s**3])
             return limit
 
         return np.vectorize(continued_phase, doc=phase.__doc__)

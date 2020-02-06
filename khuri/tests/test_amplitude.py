@@ -5,7 +5,7 @@ from khuri.madrid import phase, PION_MASS
 import khuri.amplitude as ka
 
 
-CUT = np.linspace(2.0 * PION_MASS + 1, 4.0 * PION_MASS, 2)**2
+CUT = np.linspace(2.0 * PION_MASS + 1, 4.0 * PION_MASS, 50)**2
 
 
 @ka.from_phase(PION_MASS)

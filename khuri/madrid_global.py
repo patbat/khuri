@@ -25,6 +25,7 @@ from numpy.polynomial.polynomial import Polynomial
 from numpy.lib.scimath import sqrt as csqrt, log as clog
 from scipy.misc import derivative
 
+from khuri.amplitude import from_cot, second_sheet
 from khuri.phase_space import rho
 
 
@@ -35,27 +36,6 @@ from khuri.phase_space import rho
 PION_MASS = 0.13957 # in GeV
 KAON_MASS = 0.496 # in GeV
 S_MATCHING = 1.4**2 # in GeV
-
-
-def amplitude_from_cot(cot_phase):
-    def amplitude(s):
-        return 1 / (cot_phase(s) - 1j) / rho(PION_MASS, s)
-    return amplitude
-
-
-def amplitude_from_phase(phase, inelasticity):
-    def amplitude(s):
-        return ((inelasticity(s) * np.exp(1j * phase(s)) - 1)
-                / rho(PION_MASS, s) / 2j)
-    return amplitude
-
-
-def second_sheet_from_first(amplitude):
-    def second(s):
-        first = amplitude(s)
-        return first / (1 + 2j * rho(PION_MASS, s) * first)
-
-    return second
 
 
 def arccot2(x):
@@ -219,7 +199,7 @@ def generate_s_wave(conformal_coeff, adler, f_0_coefficients, f_0_pole):
 
     return (increasing_phase,
             amplitude,
-            second_sheet_from_first(amplitude),
+            second_sheet(PION_MASS)(amplitude),
             inelasticity)
 
 
@@ -305,8 +285,8 @@ def generate_p_wave(conformal_coeff, d_0, d_1,
     def phase(s):
         return arccot2(cot_phase(s))
 
-    amplitude = amplitude_from_cot(cot_phase)
-    amplitude_2 = second_sheet_from_first(amplitude)
+    amplitude = from_cot(PION_MASS)(cot_phase)
+    amplitude_2 = second_sheet(PION_MASS)(amplitude)
 
     return phase, amplitude, amplitude_2
 

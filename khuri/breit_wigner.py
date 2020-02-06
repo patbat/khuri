@@ -9,6 +9,28 @@ The expressions are mainly taken from
 """
 import numpy as np
 
+from khuri.phase_space import rho
+
+
+def partial_wave(mandelstam_s, resonance_mass, resonance_width,
+                 angular_momentum, mass):
+    """The Breit Wigner partial wave with an energy dependent width.
+
+    Notes
+    -----
+    This differs from the one in the PDG via one phase space factor, that
+    is introduced in the appropriate place to
+        1. obtain a unitarity relation of the form
+            Im(partial_wave) = (phase_space) * abs(partial_wave)**2
+        2. avoid division by 0 at threshold.
+    Moreover, the coupling is fixed by unitarity.
+    """
+    width = width_energy_dependent(mandelstam_s, resonance_mass,
+                                   resonance_width, angular_momentum, mass)
+    width *= resonance_mass
+    space = rho(mass, mandelstam_s)
+    return -width / (mandelstam_s - resonance_mass**2 + width * space * 1j)
+
 
 def simple_amplitude(mandelstam_s, mass, width, coupling1, coupling2=None):
     """The Breit Wigner amplitude in its simple form."""
@@ -25,7 +47,7 @@ def amplitude(mandelstam_s,
               mass,
               coupling1,
               coupling2=None):
-    """The Breit Wigner amplitude with and energy dependent width."""
+    """The Breit Wigner amplitude with an energy dependent width."""
     width = width_energy_dependent(mandelstam_s, resonance_mass,
                                    resonance_width, angular_momentum, mass)
     return simple_amplitude(mandelstam_s, resonance_mass, width, coupling1,

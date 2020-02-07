@@ -3,6 +3,8 @@
 High energy continuation of phases.
 ===================================
 """
+from functools import wraps
+
 import numpy as np
 from scipy.misc import derivative
 
@@ -23,6 +25,7 @@ def asymptotic1(matching_point, limit=np.pi):
             raise ValueError("the continuation of the phase to high energies"
                              " exhibits a pole above the matching point")
 
+        @wraps(phase)
         def continued_phase(s):
             if s < matching_point:
                 return phase(s)
@@ -46,6 +49,7 @@ def asymptotic2(lower, upper, limit=np.pi):
     [`lower`, `upper`].
     """
     def wrapper(phase):
+        @wraps(phase)
         def continued_phase(s):
             if s < lower:
                 return phase(s)
@@ -83,6 +87,7 @@ def asymptotic3(lower, upper, limit=np.pi):
         ])
         coefficients = np.linalg.inv(matrix) @ vector
 
+        @wraps(phase)
         def continued_phase(s):
             if s < lower:
                 return phase(s)

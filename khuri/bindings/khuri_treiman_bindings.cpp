@@ -95,8 +95,7 @@ void create_basis_binding(py::module& m, const std::string& type_name)
              py::arg("virtuality"),
              py::arg("method")=Method::inverse,
              py::arg("accuracy")=std::nullopt)
-        // .def("__call__", py::vectorize(&B::operator()),
-        .def("__call__", &B::operator(),
+        .def("__call__", py::vectorize(&B::operator()),
              call_docstring.c_str(),
              py::arg("i"),
              py::arg("s"));

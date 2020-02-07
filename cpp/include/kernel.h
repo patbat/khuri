@@ -241,7 +241,7 @@ public:
         ///< or via direct matrix inversion
         ///< @param accuracy allows to tune the accuracy of the solution if
         ///< iteration is used.
-    Complex operator()(std::size_t i, const Complex& s) const;
+    Complex operator()(std::size_t i, Complex s) const;
         ///< @brief Evaluate the basis function with subtraction polynomial
         ///< s^`i` at `s`.
 private:
@@ -438,7 +438,7 @@ std::vector<std::pair<T,T>> segments_without(const std::vector<T>& points,
 }
 
 template<typename T>
-Complex Basis<T>::operator()(std::size_t i, const Complex& s) const
+Complex Basis<T>::operator()(std::size_t i, Complex s) const
 {
     const auto& integrand{integrands.at(i)};
     Complex dispersive_integral;

@@ -1,6 +1,10 @@
 from enum import Enum
 
 from _khuri_gsl import *
+from _khuri_gsl import __doc__ as module_docstring
+
+
+__doc__ = module_docstring
 
 
 class IntegrationRoutine(Enum):

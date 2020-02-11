@@ -1,5 +1,9 @@
 from khuri.gsl import Settings, IntegrationRoutine
 from _khuri_omnes import *
+from _khuri_omnes import __doc__ as module_docstring
+
+
+__doc__ = module_docstring
 
 
 def generate_omnes(*args,

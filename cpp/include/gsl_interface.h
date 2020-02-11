@@ -1,12 +1,13 @@
 #ifndef GSL_INTERFACE_H
 #define GSL_INTERFACE_H
 
-#include <algorithm>
-#include <cmath>
-#include <functional>
 #include "gsl/gsl_integration.h"
 #include "gsl/gsl_errno.h"
 #include "gsl/gsl_spline.h"
+
+#include <algorithm>
+#include <cmath>
+#include <functional>
 #include <iterator>
 #include <limits>
 #include <memory>

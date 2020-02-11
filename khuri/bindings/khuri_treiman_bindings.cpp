@@ -1,5 +1,5 @@
 #include "khuri_treiman.h"
-#include <omnes.h>
+#include "omnes.h"
 
 #include "pybind11/pybind11.h"
 #include "pybind11/complex.h"

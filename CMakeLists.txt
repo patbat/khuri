@@ -40,3 +40,8 @@ target_link_libraries(_khuri_khuri_treiman PRIVATE gsl gslcblas)
 pybind11_add_module(_khuri_chpt
     "${SOURCE_DIR}/chpt.cpp"
     "${BINDING_DIR}/chpt_bindings.cpp")
+
+pybind11_add_module(_khuri_iam
+    "${SOURCE_DIR}/chpt.cpp"
+    "${SOURCE_DIR}/iam.cpp"
+    "${BINDING_DIR}/iam_bindings.cpp")

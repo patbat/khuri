@@ -68,9 +68,12 @@ def omega(s, s_0, alpha):
 
     Parameters
     ----------
-    s: the Mandelstam variable s
-    s_0: usually non-negative. Above s_0, the conformal variable is complex.
-    alpha: the center of the conformal expansion
+    s
+        the Mandelstam variable `s`
+    s_0
+        usually non-negative. Above `s_0`, the conformal variable is complex.
+    alpha
+        the center of the conformal expansion
     """
     sqrt_s = csqrt(s)
     diff = alpha * csqrt(s_0 - s)

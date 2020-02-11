@@ -1,7 +1,7 @@
 """
-===================================
-High energy continuation of phases.
-===================================
+==================================
+High energy continuation of phases
+==================================
 """
 from functools import wraps
 
@@ -39,7 +39,7 @@ def asymptotic1(matching_point, limit=np.pi):
 def asymptotic2(lower, upper, limit=np.pi):
     """Return phase that equals `phase` below `lower` and `limit` above `upper`.
 
-    Between `lower` and `upper` there is a in [`lower`,`upper`] one
+    Between `lower` and `upper` there is a in [`lower`, `upper`] one
     times continuously differentiable smooth connection.
 
     Note
@@ -66,7 +66,7 @@ def asymptotic2(lower, upper, limit=np.pi):
 def asymptotic3(lower, upper, limit=np.pi):
     """Return phase that equals `phase` below `lower` and `limit` above `upper`.
 
-    Between `lower` and `upper` there is a in [`lower`,`upper`] one
+    Between `lower` and `upper` there is a in [`lower`, `upper`] one
     times continuously differentiable smooth connection.
 
     Note

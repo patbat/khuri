@@ -3,9 +3,11 @@
 Breit Wigner amplitude and phase
 ================================
 
+Different versions of the Breit Wigner formula.
+
 The expressions are mainly taken from
 <D. M. Asner, C. Hanhart, and E. Klempt. “Resonances”.
- In: Review of Particle Physics.  2015. Chap. 48.>.
+In: Review of Particle Physics.  2015. Chap. 48.>.
 """
 import numpy as np
 
@@ -16,13 +18,16 @@ def partial_wave(mandelstam_s, resonance_mass, resonance_width,
                  angular_momentum, mass):
     """The Breit Wigner partial wave with an energy dependent width.
 
-    Notes
-    -----
-    This differs from the one in the PDG via one phase space factor, that
+    Note
+    ----
+    This differs from the one in the PDG via one phase space factor that
     is introduced in the appropriate place to
+
         1. obtain a unitarity relation of the form
-            Im(partial_wave) = (phase_space) * abs(partial_wave)**2
-        2. avoid division by 0 at threshold.
+           Im(partial_wave) = (phase_space) * abs(partial_wave)**2
+
+        2. avoid division by zero at threshold.
+
     Moreover, the coupling is fixed by unitarity.
     """
     width = width_energy_dependent(mandelstam_s, resonance_mass,
@@ -81,15 +86,15 @@ def cm_momentum(mandelstam_s, mass):
 def blatt_weisskopf(angular_momentum: int, momentum):
     """The Blatt-Weisskopf barrier factors SQUARED.
 
+    Taken from <Ann. Physik 4 (1995) 404 - 430>.
+
     Parameters
     ----------
-    angular_momentum: the angular momentum quantum number.
-    momentum: the magnitude of the momentum, usually expressed in terms of an
+    angular_momentum : int
+        the angular momentum quantum number.
+    momentum
+        the magnitude of the momentum, usually expressed in terms of an
         energy scale representing the range of interaction.
-
-    Notes
-    -----
-    Taken from <Ann. Physik 4 (1995) 404 - 430>.
     """
     if angular_momentum == 0:
         return _zero(momentum)

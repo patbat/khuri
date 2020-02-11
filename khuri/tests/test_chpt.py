@@ -34,4 +34,4 @@ def test_perturbative_unitarity():
     mandelstam_s = np.linspace(5.0, 40.0, 50) * PION_MASS**2
     one = np.imag(nlo(mandelstam_s))
     two = rho(PION_MASS, mandelstam_s) * np.abs(lo(mandelstam_s))**2
-    assert np.allclose(one, two) #, atol=1e-14, rtol=0)
+    assert np.allclose(one, two)

@@ -36,3 +36,7 @@ pybind11_add_module(_khuri_khuri_treiman
     "${SOURCE_DIR}/piecewise.cpp"
     "${BINDING_DIR}/khuri_treiman_bindings.cpp")
 target_link_libraries(_khuri_khuri_treiman PRIVATE gsl gslcblas)
+
+pybind11_add_module(_khuri_chpt
+    "${SOURCE_DIR}/chpt.cpp"
+    "${BINDING_DIR}/chpt_bindings.cpp")

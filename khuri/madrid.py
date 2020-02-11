@@ -3,10 +3,10 @@
 The I=J=1 pi pi->pi pi Madrid partial wave parametrization
 ==========================================================
 
-The phrase "physical units", which is used several times in the documentation,
-refers to a consistent choice of units (e.g. all
-masses and energies etc. expressed in MeV or everything expressed in powers of
-GeV). The default choice is GeV.
+The notation
+from the paper is used in the implementation. The values for
+the non-dimensionless fit parameters/default arguments are given in GeV, so
+Mandelstam s should accordingly be given in units of (GeV)^2.
 """
 import numpy as np
 
@@ -42,10 +42,10 @@ def _momentum(s, m):
 
     Parameters
     ----------
-    s: number
-        the squared cm energy in physical units
-    m: number
-        the pion mass in physical units
+    s
+        the squared cm energy
+    m
+        the pion mass
     """
     return np.sqrt(0.25*s - m**2)
 
@@ -55,11 +55,9 @@ def _w(s, s0=S0):
 
     Parameters
     ----------
-    s: number
-        the squared cm energy in physical units
-    s0: number, optional
-        parameter, needs to have the same units as s
-        (default value is given in GeV^2)
+    s
+        the squared cm energy
+    s0
     """
     a = np.sqrt(s)
     b = np.sqrt(s0 - s)
@@ -71,19 +69,17 @@ def phase_low(s, m_pi, m_rho, b0, b1, s0=S0):
 
     Parameters
     ----------
-    s: number
-        the squared cm energy in physical units
-    m_pi: number
-        the pion mass in physical units
-    m_rho: number
-        the rho mass in physical units
-    b0: number
+    s
+        the squared cm energy
+    m_pi
+        the pion mass
+    m_rho
+        the rho mass
+    b0
         a parameter determined by fits
-    b1: number
+    b1
         a parameter determined by fits
-    s0: number, optional
-        parameter, needs to have the same units as s
-        (default value is given in GeV^2)
+    s0
     """
     en = np.sqrt(s)
     coeff = en * (m_rho**2-s) / (2*_momentum(s, m_pi)**3)
@@ -96,15 +92,15 @@ def phase_high(s, m_k, lambda_0, lambda_1, lambda_2):
 
     Parameters
     ----------
-    s: number
-        the squared cm energy in physical units
-    m_k: number
-        the kaon mass in physical units
-    lambda_0: number
+    s
+        the squared cm energy
+    m_k
+        the kaon mass
+    lambda_0
         a parameter determined by fits
-    lambda_1: number
+    lambda_1
         a parameter determined by fits
-    lambda_2: number
+    lambda_2
         a parameter determined by fits
     """
     temp = np.sqrt(s)/(2*m_k) - 1
@@ -131,25 +127,23 @@ def phase(
 
     Parameters
     ----------
-    s: number
-        the squared cm energy in physical units
-    m_pi: number
-        the pion mass in physical units
-    m_k: number
-        the kaon mass in physical units
-    m_rho: number
-        the rho mass in physical units
-    b0: number
+    s
+        the squared cm energy
+    m_pi
+        the pion mass
+    m_k
+        the kaon mass
+    m_rho
+        the rho mass
+    b0
         a parameter determined by fits
-    b1: number
+    b1
         a parameter determined by fits
-    lambda_1: number
+    lambda_1
         a parameter determined by fits
-    lambda_2: number
+    lambda_2
         a parameter determined by fits
-    s0: number, optional
-        parameter, needs to have the same units as s
-        (default value is given in GeV^2)
+    s0
     """
     if s < LOWEST**2:
         raise ValueError(f'{s} is below threshold')

@@ -21,9 +21,12 @@ matrix:
           install:
               - pip install scipy
               - pip install .
+              - pip install pytest-cov
+              - pip install coveralls
           script:
-              - cd khuri/tests/
-              - pytest
+              - pytest --cov=khuri khuri/tests/test_amplitude.py
+          after_sucess:
+              - coveralls
 before_install:
     - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     - sudo apt update -q

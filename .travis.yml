@@ -24,7 +24,7 @@ matrix:
               - pip install pytest-cov
               - pip install coveralls
           script:
-              - pytest --cov=khuri khuri/tests/test_amplitude.py
+              - pytest --cov=khuri khuri/tests/
           after_sucess:
               - coveralls
 before_install:

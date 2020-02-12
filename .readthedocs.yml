@@ -1,15 +1,15 @@
 # # Read the Docs configuration file
 #
 # # Required
-# version: 2
+version: 2
 #
 # # Build documentation in the docs/ directory with Sphinx
 # sphinx:
 #   configuration: docs/conf.py
 
-build:
-    image: latest
-
-python:
-    version: 3.7
-    setup_py_install: true
+# build:
+#     image: latest
+#
+# python:
+#     version: 3.7
+#     setup_py_install: true

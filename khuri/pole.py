@@ -15,7 +15,7 @@ import numpy as np
 from scipy.optimize import root
 from scipy.misc import derivative
 
-from phase_space import rho
+from khuri.phase_space import rho
 
 
 # a scattering amplitude/partial wave on the first sheet
@@ -60,8 +60,8 @@ def pole(func: Amplitude,
          guess: complex) -> complex:
     """Determine a pole on the 2nd sheet given the amplitude on the 1st.
 
-    Notes
-    -----
+    Note
+    ----
     The pole position is calculated via finding the root of the denominator of
     the amplitude. In addition to the root associated with the rho
     resonance there is one at threshold, the latter one does not correspond to
@@ -83,12 +83,14 @@ def coupling(func: Amplitude,
              compute_pole: bool = True) -> complex:
     """Return coupling squared on the 2nd sheet given the amplitude on the 1st.
 
-    Notes: this assumes a p-wave.
-
     Parameters
     ----------
     compute_pole: if True, the pole is computed anew using `pole_position` as
         an initial guess. If False, the pole is set to `pole_position`.
+
+    Note
+    ----
+    This assumes a p-wave.
     """
     if compute_pole:
         pole_position = pole(func, mass, pole_position)
@@ -108,7 +110,7 @@ def near_threshold(poles, mass, radius=1.0):
     mass: number
     """
     threshold = 4.0 * mass**2
-    distances = np.abs(np.asarray(poles) - threshold)
+    distances = np.abs(np.asarray(poles) - threshold) / threshold
     return np.any(distances < radius)
 
 
@@ -126,10 +128,14 @@ def _pole_from_first_sheet(func: Amplitude,
                            guess: complex) -> complex:
     denominator = generate_denominator(func, mass)
     res = root(lambda x: complex_to_array(denominator(complex(*x))),
-               [guess.real, guess.imag], method="lm")
-    if not res.success:
-        raise PoleError("pole: could not find root")
-    return complex(*res.x)
+               [guess.real, guess.imag], method='lm')
+    result = complex(*res.x)
+    # Sometimes the root finding routine signals success although the
+    # denominator does not vanish at the proposed solution, hence the second
+    # condition.
+    if not res.success or abs(denominator(result) > 1e-10):
+        raise PoleError('pole: could not find root')
+    return result
 
 
 def complex_to_array(number):

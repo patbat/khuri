@@ -60,19 +60,15 @@ def pole(func: Amplitude,
          guess: complex) -> complex:
     """Determine a pole on the 2nd sheet given the amplitude on the 1st.
 
-    Note
-    ----
+    Notes
+    -----
     The pole position is calculated via finding the root of the denominator of
-    the amplitude. In addition to the root associated with the rho
-    resonance there is one at threshold, the latter one does not correspond to
-    a pole, since the numerator of the IAM is zero at threshold, too. One needs
-    to be careful in distinguishing both roots espiacially at high pion masses,
-    when they get relatively close to each other.
+    the amplitude.
     """
     result = _pole_from_first_sheet(func, mass, guess)
     if near_threshold(result, mass):
-        warnings.warn("The determined pole is close to threshold, "
-                      "might be artificial.")
+        warnings.warn('The determined pole is close to threshold, '
+                      'might be artificial.')
     return result
 
 

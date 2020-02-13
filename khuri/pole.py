@@ -55,6 +55,7 @@ def pole_and_coupling(func: Amplitude,
     return pole_position, coupling_value
 
 
+@lower
 def pole(func: Amplitude,
          mass: float,
          guess: complex) -> complex:
@@ -65,10 +66,15 @@ def pole(func: Amplitude,
     The pole position is calculated via finding the root of the denominator of
     the amplitude.
     """
-    result = _pole_from_first_sheet(func, mass, guess)
-    if near_threshold(result, mass):
-        warnings.warn('The determined pole is close to threshold, '
-                      'might be artificial.')
+    denominator = generate_denominator(func, mass)
+    res = root(lambda x: complex_to_array(denominator(complex(*x))),
+               [guess.real, guess.imag], method='lm')
+    result = complex(*res.x)
+    # Sometimes the root finding routine signals success although the
+    # denominator does not vanish at the proposed solution, hence the second
+    # condition.
+    if not res.success or abs(denominator(result) > 1e-10):
+        raise PoleError('pole: could not find root')
     return result
 
 
@@ -97,41 +103,12 @@ def coupling(func: Amplitude,
     return coupling_squared
 
 
-def near_threshold(poles, mass, radius=1.0):
-    """Check if any pole lies inside a disk around threshold with given radius.
-
-    Parameters
-    ----------
-    poles: number or iterable of numbers
-    mass: number
-    """
-    threshold = 4.0 * mass**2
-    distances = np.abs(np.asarray(poles) - threshold) / threshold
-    return np.any(distances < radius)
-
-
 def generate_denominator(func: Amplitude,
                          mass: float) -> Callable[[complex], complex]:
     """Generate the denominator of the amplitude on the 2nd sheet."""
     def wrapper(mandelstam_s):
         return 1.0 + 2.0j * rho(mass, mandelstam_s) * func(mandelstam_s)
     return wrapper
-
-
-@lower
-def _pole_from_first_sheet(func: Amplitude,
-                           mass: float,
-                           guess: complex) -> complex:
-    denominator = generate_denominator(func, mass)
-    res = root(lambda x: complex_to_array(denominator(complex(*x))),
-               [guess.real, guess.imag], method='lm')
-    result = complex(*res.x)
-    # Sometimes the root finding routine signals success although the
-    # denominator does not vanish at the proposed solution, hence the second
-    # condition.
-    if not res.success or abs(denominator(result) > 1e-10):
-        raise PoleError('pole: could not find root')
-    return result
 
 
 def complex_to_array(number):

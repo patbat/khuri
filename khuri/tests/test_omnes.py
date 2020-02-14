@@ -15,6 +15,12 @@ from khuri.tests.test_phases import PHASES, MATCHING_POINTS
 THRESHOLD = (2.0 * madrid.PION_MASS)**2 + 1e-6
 
 
+def test_unknown_integration():
+    with pytest.raises(ValueError):
+        generate_omnes(PHASES[0], threshold=THRESHOLD,
+                       integration_routine='routine')
+
+
 def all_omnes_for_phase(phase):
     return (
         generate_omnes(phase, threshold=THRESHOLD, constant=np.pi, cut=1e10),

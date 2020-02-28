@@ -15,3 +15,6 @@ API Reference
 
 .. automodule:: khuri.phases
    :members:
+
+.. automodule:: khuri.singularity
+   :members:

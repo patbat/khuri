@@ -37,7 +37,6 @@ def cubic_equation(coeff, number: int):
     threshold = 1e-20
     if np.any(abs(delta) < threshold):
         delta = cube_root((delta1 - sqr) / 2.0)
-        assert np.all(abs(delta) > threshold)
     delta *= CUBE_ROOT**number
     return -1.0 * (c2 + delta + delta0 / delta) / 3.0 / c3
 
@@ -107,3 +106,30 @@ def singularity_curve(decay_mass_2, mass_2, number, points=200, eps=1e-6):
     """
     cos2 = np.linspace(0 + eps, 1 - eps, points)
     return singularity(cos2, decay_mass_2, mass_2, number)
+
+
+def singularity_curves(decay_mass_2, mass_2, points=200, eps=1e-6):
+    """Return the values of the three singularity curves.
+
+    Parameters
+    ----------
+    decay_mass_2: float
+        the squared mass of the decaying particle
+    mass_2: float
+        the squared mass of one of the equal-mass particles in the final state
+    points: int, optional
+        the number of sites
+    eps: float, optional
+        the endpoints of the curve correspond to the values `0 + eps`
+        and `1 - eps` of the squared cosine of the scattering angle.
+        (At 0 and 1 the cubic equation reduces to a quadratic one, so the
+        general solution of the first stops working.)
+
+    Returns
+    -------
+    result: dict
+        the three entries with keys 0, 1, and 2 contain each the values of one
+        singularity curve
+    """
+    return {k: singularity_curve(decay_mass_2, mass_2, k, points, eps)
+            for k in range(3)}

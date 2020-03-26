@@ -10,6 +10,8 @@ Nucl. Phys. B363, 97 (1991)>.
 More recent values for the parameters are given in
 <G. Colangelo, J. Gasser, H.Leutwyler, Nuclear Physics B 603 (2001) 125–179>.
 """
+import functools
+
 import numpy as np
 from khuri.amplitude import from_cot
 
@@ -62,12 +64,56 @@ def partial_wave(mandelstam_s, isospin, pion_mass, peak, coefficients):
     return amp(mandelstam_s)
 
 
-def partial_wave_lit(mandelstam_s, isospin, pion_mass):
-    params = literature_values(isospin, pion_mass)
-    return partial_wave(mandelstam_s, isospin, pion_mass, *params)
+def literature(func):
+    @functools.wraps(func)
+    def wrapper(mandelstam_s, isospin, pion_mass):
+        params = literature_values(isospin, pion_mass)
+        return func(mandelstam_s, isospin, pion_mass, *params)
+    return wrapper
+
+
+@literature
+def tan_phase_lit(*args, **kwargs):
+    """The tangent of the phase w/ parameters set to literature values.
+
+    Parameters
+    ----------
+    mandelstam_s: float or array_like
+        the value of the Mandelstam variable s, at which the phase is evaluated
+    isospin: int
+        the value of the isospin of the partial wave (one of 0, 1, 2)
+    pion_mass: float
+        the value of the pion mass
+    """
+    return tan_phase(*args, **kwargs)
+
+
+@literature
+def partial_wave_lit(*args, **kwargs):
+    """The partial wave amplitude w/ parameters set to literature values.
+
+    Parameters
+    ----------
+    mandelstam_s: float or array_like
+        the value of the Mandelstam variable s, at which the phase is evaluated
+    isospin: int
+        the value of the isospin of the partial wave (one of 0, 1, 2)
+    pion_mass: float
+        the value of the pion mass
+    """
+    return partial_wave(*args, **kwargs)
 
 
 def literature_values(isospin, pion_mass):
+    """Return literature values of parameters.
+
+    Parameters
+    ----------
+    isospin: int
+        the value of the isospin of the partial wave (one of 0, 1, 2)
+    pion_mass: float
+        the value of the pion mass
+    """
     if isospin == 0:
         return 36.77 * pion_mass**2, (0.22, 0.268, -0.139e-1, -0.139e-2)
     if isospin == 1:
@@ -75,3 +121,4 @@ def literature_values(isospin, pion_mass):
     if isospin == 2:
         return -21.62 * pion_mass**2, (-0.444e-1, -0.857e-1, -0.221e-2,
                                        -0.129e-3)
+    raise ValueError(f'There is no partial wave with isospion {isospin}.')

@@ -11,6 +11,7 @@ More recent values for the parameters are given in
 <G. Colangelo, J. Gasser, H.Leutwyler, Nuclear Physics B 603 (2001) 125–179>.
 """
 import numpy as np
+from khuri.amplitude import from_cot
 
 
 def tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
@@ -38,9 +39,32 @@ def tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
     return phase_space * param**isospin * polynomial * peak_factor
 
 
-def tan_phase_lit(mandelstam_s, isospin, pion_mass):
+def partial_wave(mandelstam_s, isospin, pion_mass, peak, coefficients):
+    """Return the partial wave amplitude.
+
+    Parameters
+    ----------
+    mandelstam_s: float or array_like
+        the value of the Mandelstam variable s, at which the phase is evaluated
+    isospin: int
+        the value of the isospin of the partial wave (one of 0, 1, 2)
+    pion_mass: float
+        the value of the pion mass
+    peak: float
+        the value of Mandelstam s at which the phase equals 90 degree
+    coefficients: iterable
+        the (dimensionless) coefficients of the polynomial in the
+        parametrization
+    """
+    @from_cot(pion_mass)
+    def amp(s_value):
+        return 1.0 / tan_phase(s_value, isospin, pion_mass, peak, coefficients)
+    return amp(mandelstam_s)
+
+
+def partial_wave_lit(mandelstam_s, isospin, pion_mass):
     params = literature_values(isospin, pion_mass)
-    return tan_phase(mandelstam_s, isospin, pion_mass, *params)
+    return partial_wave(mandelstam_s, isospin, pion_mass, *params)
 
 
 def literature_values(isospin, pion_mass):

@@ -121,4 +121,4 @@ def literature_values(isospin, pion_mass):
     if isospin == 2:
         return -21.62 * pion_mass**2, (-0.444e-1, -0.857e-1, -0.221e-2,
                                        -0.129e-3)
-    raise ValueError(f'There is no partial wave with isospion {isospin}.')
+    raise ValueError(f'There is no partial wave with isospin {isospin}.')

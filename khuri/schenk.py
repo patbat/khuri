@@ -1,7 +1,7 @@
 """
-============================================================
-The Schenk parametrization pion+pion -> pion+pion scattering
-============================================================
+===============================================================
+The Schenk parametrization of pion+pion -> pion+pion scattering
+===============================================================
 
 The original form of the parametrization is given in
 <A. Schenk, Absorption and dispersion of pions at finite temperature.

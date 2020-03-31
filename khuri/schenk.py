@@ -38,7 +38,12 @@ def tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
     phase_space = np.sqrt(1.0 - threshold / mandelstam_s)
     polynomial = sum(coeff * param**i for i, coeff in enumerate(coefficients))
     peak_factor = (threshold - peak) / (mandelstam_s - peak)
-    return phase_space * param**isospin * polynomial * peak_factor
+    spin = {
+        0: 0,
+        1: 1,
+        2: 0,
+    }
+    return phase_space * param**spin[isospin] * polynomial * peak_factor
 
 
 def partial_wave(mandelstam_s, isospin, pion_mass, peak, coefficients):

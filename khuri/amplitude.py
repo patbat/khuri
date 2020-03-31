@@ -5,6 +5,7 @@ General two particle into two particle scattering amplitudes
 
 It is assumed that all particles have the same mass.
 """
+from typing import Optional
 from functools import wraps
 
 import numpy as np
@@ -12,13 +13,32 @@ import numpy as np
 from khuri.phase_space import rho
 
 
-def from_cot(mass):
-    """Obtain amplitude from cotangent of the phase."""
+def from_cot(mass: float, spin: Optional[int] = None):
+    """Obtain amplitude from cotangent of the phase.
+
+    Parameters
+    ----------
+    mass: float
+        the mass of an individual particle
+    spin: int, optional
+        partial waves with non-zero angular momentum vanish at threshold.
+        If `spin` is specified and non-zero, this behaviour is enforced.
+    """
     def wrapper(cot_phase):
-        @wraps(cot_phase)
         def amplitude(*args):
             return 1 / (cot_phase(*args) - 1j) / rho(mass, args[-1])
-        return amplitude
+        if not spin:
+            return wraps(cot_phase)(amplitude)
+
+        @wraps(cot_phase)
+        def modified_amplitude(*args):
+            threshold = 4.0 * mass**2
+            mandelstam_s = np.asarray(args[-1], dtype=np.complex128)
+            return np.piecewise(mandelstam_s,
+                                [mandelstam_s != threshold],
+                                [lambda x: amplitude(*args[:-1], x),
+                                 lambda _: 0.0])
+        return modified_amplitude
     return wrapper
 
 

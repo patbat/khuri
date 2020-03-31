@@ -34,6 +34,11 @@ def amplitude3(mandelstam_s):
     return 1.0 / np.tan(phase(mandelstam_s))
 
 
+@ka.from_cot(PION_MASS, spin=1)
+def amplitude4(mandelstam_s):
+    return 1.0 / np.tan(phase(mandelstam_s))
+
+
 class Phase:
     shift = np.pi
 
@@ -45,7 +50,7 @@ class Phase:
     def static(cls, mandelstam_s):
         return phase(mandelstam_s) + cls.shift
 
-    @ka.from_cot(PION_MASS)
+    @ka.from_cot(PION_MASS, spin=1)
     def non_static(self, mandelstam_s):
         return 1.0 / np.tan(phase(mandelstam_s) + self.shift)
 
@@ -60,9 +65,21 @@ def test_static_method():
 
 
 def test_consistency():
-    amplitudes = (amplitude, amplitude2, amplitude3)
+    amplitudes = (amplitude, amplitude2, amplitude3, amplitude4)
     for amp1, amp2 in itertools.combinations(amplitudes, 2):
         assert np.allclose(amp1(CUT), amp2(CUT))
+
+
+def test_threshold():
+    assert amplitude4(4.0 * PION_MASS**2) == 0.0
+
+
+def test_threshold_array():
+    threshold = 4.0 * PION_MASS**2
+    values = amplitude4([threshold, 20.0, 10.5, threshold, 30.0, threshold])
+    assert values[0] == 0.0
+    assert values[3] == 0.0
+    assert values[-1] == 0.0
 
 
 class TestSecondSheet:

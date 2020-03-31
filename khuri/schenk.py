@@ -13,6 +13,7 @@ More recent values for the parameters are given in
 import functools
 
 import numpy as np
+
 from khuri.amplitude import from_cot
 
 
@@ -33,17 +34,31 @@ def tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
         the (dimensionless) coefficients of the polynomial in the
         parametrization
     """
-    threshold = 4.0 * pion_mass**2
-    param = mandelstam_s / threshold - 1.0
-    phase_space = np.sqrt(1.0 - threshold / mandelstam_s)
-    polynomial = sum(coeff * param**i for i, coeff in enumerate(coefficients))
-    peak_factor = (threshold - peak) / (mandelstam_s - peak)
+    mandelstam_s = np.asarray(mandelstam_s)
+    return np.piecewise(mandelstam_s,
+                        [mandelstam_s != peak],
+                        [lambda x: _tan_phase(x, isospin, pion_mass, peak,
+                                              coefficients),
+                         lambda _: np.inf])
+
+
+def to_spin(isospin):
+    """Return the spin corresponding to a given isospin."""
     spin = {
         0: 0,
         1: 1,
         2: 0,
     }
-    return phase_space * param**spin[isospin] * polynomial * peak_factor
+    return spin[isospin]
+
+
+def _tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
+    threshold = 4.0 * pion_mass**2
+    param = mandelstam_s / threshold - 1.0
+    phase_space = np.sqrt(1.0 - threshold / mandelstam_s)
+    polynomial = sum(coeff * param**i for i, coeff in enumerate(coefficients))
+    peak_factor = (threshold - peak) / (mandelstam_s - peak)
+    return phase_space * param**to_spin(isospin) * polynomial * peak_factor
 
 
 def partial_wave(mandelstam_s, isospin, pion_mass, peak, coefficients):
@@ -63,10 +78,16 @@ def partial_wave(mandelstam_s, isospin, pion_mass, peak, coefficients):
         the (dimensionless) coefficients of the polynomial in the
         parametrization
     """
-    @from_cot(pion_mass)
+    @from_cot(pion_mass, spin=to_spin(isospin))
     def amp(s_value):
-        return 1.0 / tan_phase(s_value, isospin, pion_mass, peak, coefficients)
+        tan = tan_phase(s_value, isospin, pion_mass, peak, coefficients)
+        return inverse(tan)
     return amp(mandelstam_s)
+
+
+def inverse(values):
+    return np.piecewise(values, [values != 0.0],
+                        [lambda x: 1.0 / x, lambda _: np.inf])
 
 
 def literature(func):

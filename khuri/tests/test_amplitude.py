@@ -34,6 +34,31 @@ def amplitude3(mandelstam_s):
     return 1.0 / np.tan(phase(mandelstam_s))
 
 
+class Phase:
+    shift = np.pi
+
+    def __init__(self, shift):
+        self.shift = shift
+
+    @classmethod
+    @ka.from_phase(PION_MASS)
+    def static(cls, mandelstam_s):
+        return phase(mandelstam_s) + cls.shift
+
+    @ka.from_cot(PION_MASS)
+    def non_static(self, mandelstam_s):
+        return 1.0 / np.tan(phase(mandelstam_s) + self.shift)
+
+
+def test_method():
+    instance = Phase(shift=np.pi)
+    assert instance.non_static(7.0) < np.inf
+
+
+def test_static_method():
+    assert Phase.static(7.0) < np.inf
+
+
 def test_consistency():
     amplitudes = (amplitude, amplitude2, amplitude3)
     for amp1, amp2 in itertools.combinations(amplitudes, 2):

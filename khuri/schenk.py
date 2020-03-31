@@ -15,6 +15,7 @@ import functools
 import numpy as np
 
 from khuri.amplitude import from_cot
+from khuri.phase_space import rho
 
 
 def tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
@@ -55,7 +56,7 @@ def to_spin(isospin):
 def _tan_phase(mandelstam_s, isospin, pion_mass, peak, coefficients):
     threshold = 4.0 * pion_mass**2
     param = mandelstam_s / threshold - 1.0
-    phase_space = np.sqrt(1.0 - threshold / mandelstam_s)
+    phase_space = rho(pion_mass, mandelstam_s)
     polynomial = sum(coeff * param**i for i, coeff in enumerate(coefficients))
     peak_factor = (threshold - peak) / (mandelstam_s - peak)
     return phase_space * param**to_spin(isospin) * polynomial * peak_factor

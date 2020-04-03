@@ -5,6 +5,8 @@
 #include "constants.h"
 #include "gsl_interface.h"
 
+#include "pybind11/pybind11.h"
+
 #include <cmath>
 #include <complex>
 
@@ -54,6 +56,8 @@ public:
 
     double derivative_at_zero() const noexcept {return derivative;}
         ///< Return the derivative of the Omnes function at the origin.
+
+    auto get_state() const;
 private:
     const gsl::Function phase_below; // phase below `cut`
     const double constant;
@@ -206,6 +210,13 @@ double Omnes<T>::abs_cut(double s) const
     double a{s<cut ? constant-phase_at_s : 0.0};
     return std::exp((s*integral + a*abs_helper(s,cut)
             + phase_at_s*abs_helper(s,threshold))/constants::pi());
+}
+
+template<typename T>
+auto Omnes<T>::get_state() const
+{
+    return pybind11::make_tuple(phase_below, threshold, constant, cut,
+                                minimal_distance);
 }
 } // omnes
 

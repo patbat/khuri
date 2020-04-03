@@ -29,7 +29,23 @@ void create_binding(py::module& m, const std::string& name)
              py::arg("minimal_distance") = 1e-10,
              py::arg("config") = Settings{})
         .def("__call__", py::vectorize(&Omnes<T>::operator()),
-                py::arg("s"));
+                py::arg("s"))
+        .def(py::pickle(
+                    [](const Omnes<T>& omn)
+                    {
+                        return omn.get_state();
+                    },
+                    [](py::tuple tup)
+                    {
+                        return Omnes<T>{
+                                tup[0].cast<Function>(),
+                                tup[1].cast<double>(),
+                                tup[2].cast<double>(),
+                                tup[3].cast<double>(),
+                                tup[4].cast<double>(),
+                            };
+                    }
+                    ));
 }
 
 PYBIND11_MODULE(_khuri_omnes, m) {

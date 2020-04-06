@@ -45,3 +45,6 @@ pybind11_add_module(_khuri_iam
     "${SOURCE_DIR}/chpt.cpp"
     "${SOURCE_DIR}/iam.cpp"
     "${BINDING_DIR}/iam_bindings.cpp")
+
+pybind11_add_module(_khuri_phase_space
+    "${BINDING_DIR}/phase_space_bindings.cpp")

@@ -24,13 +24,25 @@ inline Complex alt_sqrt(const Complex& x)
     return signum_im(x)*std::sqrt(x);
 }
 
-inline Complex rho(double mass, const Complex s)
+inline double rho(double mass, double s)
+    /// The two-body phase space (cuts along [4mass^2,\infty) and (-\infty,0]).
+{
+    return std::sqrt(1.0 - 4.0*square(mass)/s);
+}
+
+inline Complex rho(double mass, Complex s)
     /// The two-body phase space (cuts along [4mass^2,\infty) and (-\infty,0]).
 {
     return alt_sqrt(1.0 - 4.0*square(mass)/s);
 }
 
-inline Complex sigma(double mass, const Complex s)
+inline double sigma(double mass, double s)
+    /// The two-body phase space (cut along [0,4mass^2]).
+{
+    return std::sqrt(1.0 - 4.0*square(mass)/s);
+}
+
+inline Complex sigma(double mass, Complex s)
     /// The two-body phase space (cut along [0,4mass^2]).
 {
     return std::sqrt(1.0 - 4.0*square(mass)/s);

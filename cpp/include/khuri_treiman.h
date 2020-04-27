@@ -21,7 +21,7 @@ using piecewise::Real;
 
 using kernel::Basis;
 using kernel::Complex;
-using kernel::Function;
+using kernel::CFunction;
 using kernel::Method;
 } // khuri_treiman
 

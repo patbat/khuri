@@ -8,6 +8,7 @@
 #include "mandelstam.h"
 #include "omnes.h"
 #include "phase_space.h"
+#include "type_aliases.h"
 
 #include "Eigen/Dense"
 
@@ -35,7 +36,7 @@ using Matrix =
     Eigen::Matrix<Complex,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>;
 using Vector = Eigen::VectorXcd;
 using facilities::square;
-using Function = std::function<Complex(Complex)>;
+using type_aliases::CFunction;
 
 constexpr inline std::size_t index(std::size_t x_index, std::size_t z_index,
         std::size_t z_size)
@@ -84,7 +85,7 @@ inline double max_distance(const Vector& a, const Vector& b)
 
 template<typename T>
 std::vector<Complex> generate_x_dependent(const omnes::OmnesF& o,
-    const Function& pi_pi,
+    const CFunction& pi_pi,
     const Grid<T>& g, double pion_mass, int subtractions)
     /// Generate the x_j dependent terms needed in the integration kernel.
 {
@@ -99,7 +100,7 @@ std::vector<Complex> generate_x_dependent(const omnes::OmnesF& o,
 }
 
 template<typename T>
-Matrix generate_kernel(const omnes::OmnesF& o, const Function& pi_pi,
+Matrix generate_kernel(const omnes::OmnesF& o, const CFunction& pi_pi,
     const Grid<T>& g, double pion_mass, double virtuality, int subtractions)
     /// Compute the integration kernel.
 {
@@ -175,7 +176,7 @@ private:
 };
 
 template<typename T>
-std::vector<Vector> basis(const omnes::OmnesF& o, const Function& pi_pi,
+std::vector<Vector> basis(const omnes::OmnesF& o, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::inverse,
         std::optional<double> accuracy=std::nullopt)
@@ -224,7 +225,7 @@ template<typename T>
 /// The basis of the solution space to a KT equation.
 class Basis {
 public:
-    Basis(const omnes::OmnesF& o, const Function& pi_pi, int subtractions,
+    Basis(const omnes::OmnesF& o, const CFunction& pi_pi, int subtractions,
         const Grid<T>& g, double pion_mass, double virtuality,
         Method method=Method::inverse,
         std::optional<double> accuracy=std::nullopt);
@@ -256,7 +257,7 @@ private:
 };
 
 template<typename T>
-Basis<T> make_basis(const omnes::OmnesF& o, const Function& pi_pi,
+Basis<T> make_basis(const omnes::OmnesF& o, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::iteration,
         std::optional<double> accuracy=std::nullopt)
@@ -276,7 +277,7 @@ inline constexpr double threshold(double pion_mass)
 
 template<typename T>
 std::vector<Complex> discrete_basis_integrand(const omnes::OmnesF& o,
-        const Function& pi_pi, const Vector& basis, const Grid<T>& g,
+        const CFunction& pi_pi, const Vector& basis, const Grid<T>& g,
         double pion_mass)
     /// @brief Return the Mandelstam-s independent part of the integrand needed
     /// in the evaluation of a basis function.
@@ -296,7 +297,7 @@ std::vector<Complex> discrete_basis_integrand(const omnes::OmnesF& o,
 
 template<typename T>
 cauchy::Interpolate basis_integrand(const omnes::OmnesF& o,
-        const Function& pi_pi, const Vector& basis, const Grid<T>& g,
+        const CFunction& pi_pi, const Vector& basis, const Grid<T>& g,
         double pion_mass)
     /// @brief Return the interpolated Mandelstam-s independent part of the
     /// integrand needed in the evaluation of a basis function.
@@ -309,7 +310,7 @@ cauchy::Interpolate basis_integrand(const omnes::OmnesF& o,
 
 template<typename T>
 std::vector<cauchy::Interpolate> basis_integrands(const omnes::OmnesF& o,
-        const Function& pi_pi, const std::vector<Vector>& basis,
+        const CFunction& pi_pi, const std::vector<Vector>& basis,
         const Grid<T>& g, double pion_mass)
     /// @brief Return the interpolated Mandelstam-s independent parts of the
     /// integrands needed in the evaluation of an entire basis.
@@ -322,7 +323,7 @@ std::vector<cauchy::Interpolate> basis_integrands(const omnes::OmnesF& o,
 }
 
 template<typename T>
-Basis<T>::Basis(const omnes::OmnesF& o, const Function& pi_pi,
+Basis<T>::Basis(const omnes::OmnesF& o, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method, std::optional<double> accuracy)
     :

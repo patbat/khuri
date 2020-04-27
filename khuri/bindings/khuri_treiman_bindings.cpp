@@ -16,7 +16,7 @@ namespace py = pybind11;
 using khuri_treiman::Basis;
 using khuri_treiman::Complex;
 using khuri_treiman::Curve;
-using khuri_treiman::Function;
+using khuri_treiman::CFunction;
 using khuri_treiman::Grid;
 using khuri_treiman::Method;
 using khuri_treiman::Piecewise;
@@ -79,7 +79,7 @@ void create_basis_binding(py::module& m, const std::string& type_name)
          "Evaluate the basis function with subtraction polynomial s^`i` at `s`";
     py::class_<B>(m, name.c_str())
         .def(py::init<const omnes::OmnesF&,
-                      const Function&,
+                      const CFunction&,
                       int,
                       const G&,
                       double,

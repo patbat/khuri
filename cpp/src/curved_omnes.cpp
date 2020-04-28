@@ -8,7 +8,7 @@ std::vector<Complex> first_points(const grid::Curve& curve, std::size_t size)
         std::stringstream message;
         message << "Tried to retrieve " << size << " elements, but curve has "
             << "only " << boundaries.size() << " boundary points.";
-        throw std::domain_error{message.str()};
+        throw std::invalid_argument{message.str()};
     }
     std::vector<Complex> points;
     points.reserve(size);
@@ -18,12 +18,22 @@ std::vector<Complex> first_points(const grid::Curve& curve, std::size_t size)
     return points;
 }
 
+std::vector<Complex> all_points(const grid::Curve& curve)
+{
+    return first_points(curve, curve.boundaries().size());
+}
+
 bool on_second_sheet(const std::vector<Complex>& points,
         const Complex& mandelstam_s)
 {
-    return points[0].real() < mandelstam_s.real()
-        && mandelstam_s.real() < points[3].real()
-        && points[1].imag() < mandelstam_s.imag()
-        && mandelstam_s.imag() < 0.0;
+    const auto size{points.size()};
+    if (size == 2)
+        return false;
+    if (size > 3)
+        return points[0].real() < mandelstam_s.real()
+            && mandelstam_s.real() < points[3].real()
+            && points[1].imag() < mandelstam_s.imag()
+            && mandelstam_s.imag() < 0.0;
+    throw std::runtime_error{"Don't know how to handle this case"};
 }
 } // curved_omnes

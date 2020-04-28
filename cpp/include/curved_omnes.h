@@ -20,6 +20,9 @@ using type_aliases::CFunction;
 std::vector<Complex> first_points(const grid::Curve& curve, std::size_t size);
     ///< Extract the first `size` boundary points of `curve`.
 
+std::vector<Complex> all_points(const grid::Curve& curve);
+    ///< Extract all boundary points of `curve`.
+
 bool on_second_sheet(const std::vector<Complex>& points,
         const Complex& mandelstam_s);
     ///< Determine if `mandelstam_s` is on the second sheet.
@@ -32,13 +35,15 @@ public:
         /// @param o The omnes function with the usual right-hand cut.
         /// @param amplitude The two-to-two particle scattering amplitude
         /// associated with the phase of `o`.
-        /// @param curve The branch cut of the returned Omnes function. Currently,
-        /// this needs to be a piecewise curve with at least four knots, where
+        /// @param curve The branch cut of the returned Omnes function.
+        /// Currently, this needs to be a piecewise curve with either two
+        /// points (in this case a subset of the real axis) or one with at
+        /// least four knots, where
         /// the first four knots form a rectangle extending into the lower half
         /// plane. This is due to the non-general inner-workings of
         /// `on_second_sheet`.
         : o{std::move(o)}, amplitude{std::move(amplitude)},
-        points{first_points(std::forward<C>(curve), 4)}
+        points{all_points(std::forward<C>(curve))}
     {
         static_assert(std::is_base_of_v<grid::Curve,
                                         std::remove_reference_t<C>>,

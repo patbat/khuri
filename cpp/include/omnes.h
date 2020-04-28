@@ -219,7 +219,8 @@ double Omnes<T>::abs_cut(double s) const
 }
 
 template<typename T>
-Complex second_sheet(const Omnes<T>& o, const CFunction& amplitude, Complex s)
+Complex second_sheet(const Omnes<T>& o, const CFunction& amplitude,
+        const Complex& s)
     /// Evaluate the Omnes function on the second Riemann sheet.
     /// @param o The Omnes function.
     /// @param amplitude The two-particle scattering amplitude associated with

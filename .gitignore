@@ -1,0 +1,5 @@
+.mypy_cache
+*.swp
+build/
+_build/
+__pycache__

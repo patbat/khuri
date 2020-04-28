@@ -33,11 +33,19 @@ void create_binding(py::module& m, const std::string& name)
 }
 
 template<typename T>
+omnes::Complex second_sheet(const Omnes<T> o, const omnes::CFunction amplitude,
+        const omnes::Complex s)
+    // Needed because passing by const reference does not go hand in hand
+    // with pybind11:vectorize.
+{
+    return omnes::second_sheet<T>(o, amplitude, s);
+}
+
+template<typename T>
 void second_sheet_binding(py::module& m, const std::string& name)
 {
     m.def(name.c_str(),
-        // py::vectorize(omnes::second_sheet<T>),
-        omnes::second_sheet<T>,
+        py::vectorize(second_sheet<T>),
         "Evaluate the Omnes function on the second Riemann sheet.",
         py::arg("omnes_function"),
         py::arg("amplitude"),
@@ -51,5 +59,5 @@ PYBIND11_MODULE(_khuri_omnes, m) {
     create_binding<gsl::Qag>(m, "OmnesQag");
 
     second_sheet_binding<gsl::Cquad>(m, "second_sheet_cquad");
-    second_sheet_binding<gsl::Qag>(m, "second_sheet_quag");
+    second_sheet_binding<gsl::Qag>(m, "second_sheet_qag");
 }

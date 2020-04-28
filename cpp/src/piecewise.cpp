@@ -22,6 +22,14 @@ Piecewise::Piecewise(const std::vector<Complex>& knots,
     }
 }
 
+Piecewise::Piecewise(const std::vector<Complex>& knots)
+{
+    const auto size{knots.size()};
+    if (size < 2)
+        throw std::invalid_argument{"Curve needs to have at least two knots."};
+    *this = Piecewise{knots, Piecewise::all_linear(size - 1)};
+}
+
 std::size_t Piecewise::piece_index(double x) const
 {
     if (x<lower() || x>upper())
@@ -104,8 +112,7 @@ std::vector<Complex> vector_decay_points(double pion_mass, double virtuality,
 }
 
 Vector_decay::Vector_decay(double pion_mass, double virtuality, double cut)
-    : Piecewise{vector_decay_points(pion_mass,virtuality,cut),
-        Piecewise::all_linear(5)}
+    : Piecewise{vector_decay_points(pion_mass,virtuality,cut)}
 {
 }
 
@@ -127,8 +134,7 @@ std::vector<Complex> adaptive_points(double pion_mass, double virtuality,
 }
 
 Adaptive::Adaptive(double pion_mass, double virtuality, double cut)
-    : Piecewise{adaptive_points(pion_mass,virtuality,cut),
-                Piecewise::all_linear(5)}
+    : Piecewise{adaptive_points(pion_mass,virtuality,cut)}
 {
 }
 } // piecewise

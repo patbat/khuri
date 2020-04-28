@@ -44,6 +44,10 @@ public:
         ///< end ends at the last.
         ///< @param parametrisations The parametrisations for the different
         ///< segments of the piecewise curve.
+    Piecewise(const std::vector<Complex>& knots);
+        ///< @param knots The points in the complex plane that are connected
+        ///< with straigt lines. The curve starts at the first element of knots
+        ///< end ends at the last.
     Complex curve_func(double x) const override;
         ///< @brief Evaluate the piecewise linear curve at x.
         ///<
@@ -69,7 +73,7 @@ private:
 class Real : public Piecewise {
 public:
     Real(double threshold, double cut)
-        : Piecewise{{threshold,cut},{Para::linear}} {}
+        : Piecewise{{threshold,cut}} {}
         ///< The curve starts at `threshold` end ends at `cut`.
 };
 

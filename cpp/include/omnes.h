@@ -4,6 +4,8 @@
 #include "cauchy.h"
 #include "constants.h"
 #include "gsl_interface.h"
+#include "phase_space.h"
+#include "type_aliases.h"
 
 #include <cmath>
 #include <complex>
@@ -15,6 +17,10 @@
 /// Hence, a class `Omnes` is provided. Each instance of the class provides
 /// a different Omnes function, i.e. one for a different specific phase.
 namespace omnes {
+using namespace std::complex_literals;
+using type_aliases::Complex;
+using type_aliases::CFunction;
+
 /// The Omnes function for arbitrary phases and thresholds.
 template<typename Integrate=gsl::Cquad>
 class Omnes;
@@ -49,11 +55,14 @@ public:
         ///< function to take care of the singularity in the integral.
         ///< @param config The settings for the integration routine.
 
-    std::complex<double> operator()(std::complex<double> s) const;
+    Complex operator()(Complex s) const;
         ///< Evaluate the Omnes function at `s`.
 
     double derivative_at_zero() const noexcept {return derivative;}
         ///< Return the derivative of the Omnes function at the origin.
+
+    double branch_point() const noexcept {return threshold;}
+        ///< Return the branch point.
 private:
     const gsl::Function phase_below; // phase below `cut`
     const double constant;
@@ -63,20 +72,20 @@ private:
     const Integrate integrate;
     const double derivative;
 
-    std::complex<double> upper(const std::complex<double>& s) const;
+    Complex upper(const Complex& s) const;
         // Evaluate the Omnes function in the upper half of the complex plane
-    bool hits_threshold(const std::complex<double>& s) const;
+    bool hits_threshold(const Complex& s) const;
         // Return true if `s` is close to the `threshold`, false otherwise.
-    bool hits_cut(const std::complex<double>& s) const;
+    bool hits_cut(const Complex& s) const;
         // Return true if `s` is in the region around the branch cut, false
         // otherwise.
-    std::complex<double> threshold_presciption(double s) const;
+    Complex threshold_presciption(double s) const;
         // Calculate the Omnes function if `s` is close to `threshold`.
-    std::complex<double>
-            ordinary_prescription(const std::complex<double>& s) const;
+    Complex
+            ordinary_prescription(const Complex& s) const;
         // Calculate the Omnes function if `s` is not close to the branch
         // cut.
-    std::complex<double> cut_prescription(double s) const;
+    Complex cut_prescription(double s) const;
         // Calculate the Omnes function if `s` is close to the branch cut.
     double phase(double s) const;
         // Calculate the phase of the Omnes function along the branch cut.
@@ -120,7 +129,7 @@ Omnes<T>::Omnes(const gsl::Function& phase, double threshold, double constant,
 }
 
 template<typename T>
-std::complex<double> Omnes<T>::operator()(std::complex<double> s) const
+Complex Omnes<T>::operator()(Complex s) const
 {
     // Apply the Schwartz reflection principle.
     if (s.imag()<0)
@@ -130,7 +139,7 @@ std::complex<double> Omnes<T>::operator()(std::complex<double> s) const
 }
 
 template<typename T>
-std::complex<double> Omnes<T>::upper(const std::complex<double>& s) const
+Complex Omnes<T>::upper(const Complex& s) const
 {
     if (hits_threshold(s))
         return threshold_presciption(s.real());
@@ -141,20 +150,20 @@ std::complex<double> Omnes<T>::upper(const std::complex<double>& s) const
 }
 
 template<typename T>
-bool Omnes<T>::hits_threshold(const std::complex<double>& s) const
+bool Omnes<T>::hits_threshold(const Complex& s) const
 {
     double distance{std::abs(s-threshold)};
     return distance<=minimal_distance;
 }
 
 template<typename T>
-bool Omnes<T>::hits_cut(const std::complex<double>& s) const
+bool Omnes<T>::hits_cut(const Complex& s) const
 {
     return s.real()>=threshold && std::abs(s.imag())<=minimal_distance;
 }
 
 template<typename T>
-std::complex<double> Omnes<T>::threshold_presciption(double s) const
+Complex Omnes<T>::threshold_presciption(double s) const
 {
     // average
     return (cut_prescription(threshold+minimal_distance)
@@ -162,10 +171,10 @@ std::complex<double> Omnes<T>::threshold_presciption(double s) const
 }
 
 template<typename T>
-std::complex<double> Omnes<T>::ordinary_prescription(
-        const std::complex<double>& s) const
+Complex Omnes<T>::ordinary_prescription(
+        const Complex& s) const
 {
-    std::complex<double> above_cut{std::log(1.0-s/cut)};
+    Complex above_cut{std::log(1.0-s/cut)};
     auto integral{std::get<0>(cauchy::c_integrate(
                 [&s,this](double z){return phase_below(z)/(z*(z-s));},
                 threshold,cut,integrate))};
@@ -173,9 +182,10 @@ std::complex<double> Omnes<T>::ordinary_prescription(
 }
 
 template<typename T>
-std::complex<double> Omnes<T>::cut_prescription(double s) const
+Complex Omnes<T>::cut_prescription(double s) const
 {
-    return abs_cut(s)*std::exp(std::complex<double>{0,phase(s)});
+    const Complex arg{phase(s) * 1.0i};
+    return abs_cut(s) * std::exp(arg);
 }
 
 template<typename T>
@@ -206,6 +216,19 @@ double Omnes<T>::abs_cut(double s) const
     double a{s<cut ? constant-phase_at_s : 0.0};
     return std::exp((s*integral + a*abs_helper(s,cut)
             + phase_at_s*abs_helper(s,threshold))/constants::pi());
+}
+
+template<typename T>
+Complex second_sheet(const Omnes<T>& o, const CFunction& amplitude, Complex s)
+    /// Evaluate the Omnes function on the second Riemann sheet.
+    /// @param o The Omnes function.
+    /// @param amplitude The two-particle scattering amplitude associated with
+    /// the phase of the Omnes function.
+    /// @param s The value of Mandelstam s.
+{
+    const double pion_mass{std::sqrt(o.branch_point() / 4.0)};
+    const Complex z{2.0i};
+    return o(s) / (1.0 + z * phase_space::rho(pion_mass, s) * amplitude(s));
 }
 } // omnes
 

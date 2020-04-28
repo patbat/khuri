@@ -3,6 +3,7 @@
 
 #include "cauchy.h"
 #include "constants.h"
+#include "curved_omnes.h"
 #include "facilities.h"
 #include "grid.h"
 #include "mandelstam.h"
@@ -29,6 +30,7 @@
 /// and the function `make_basis`, everything else may be consired as
 /// implementation details.
 namespace kernel {
+using curved_omnes::CurvedOmnes;
 using grid::Complex;
 using grid::Grid;
 using grid::Point;
@@ -84,7 +86,7 @@ inline double max_distance(const Vector& a, const Vector& b)
 }
 
 template<typename T>
-std::vector<Complex> generate_x_dependent(const omnes::OmnesF& o,
+std::vector<Complex> generate_x_dependent(const CurvedOmnes& o,
     const CFunction& pi_pi,
     const Grid<T>& g, double pion_mass, int subtractions)
     /// Generate the x_j dependent terms needed in the integration kernel.
@@ -100,7 +102,7 @@ std::vector<Complex> generate_x_dependent(const omnes::OmnesF& o,
 }
 
 template<typename T>
-Matrix generate_kernel(const omnes::OmnesF& o, const CFunction& pi_pi,
+Matrix generate_kernel(const CurvedOmnes& o, const CFunction& pi_pi,
     const Grid<T>& g, double pion_mass, double virtuality, int subtractions)
     /// Compute the integration kernel.
 {
@@ -176,7 +178,7 @@ private:
 };
 
 template<typename T>
-std::vector<Vector> basis(const omnes::OmnesF& o, const CFunction& pi_pi,
+std::vector<Vector> basis(const CurvedOmnes& o, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::inverse,
         std::optional<double> accuracy=std::nullopt)
@@ -225,7 +227,7 @@ template<typename T>
 /// The basis of the solution space to a KT equation.
 class Basis {
 public:
-    Basis(const omnes::OmnesF& o, const CFunction& pi_pi, int subtractions,
+    Basis(const omnes::OmnesF& omn, const CFunction& pi_pi, int subtractions,
         const Grid<T>& g, double pion_mass, double virtuality,
         Method method=Method::inverse,
         std::optional<double> accuracy=std::nullopt);
@@ -248,8 +250,8 @@ public:
 private:
     gsl::Cquad integrate;
 
+    CurvedOmnes o;
     std::vector<Vector> _basis;
-    omnes::OmnesF o;
     int subtractions;
     double pion_mass;
     Grid<T> grid;
@@ -257,7 +259,7 @@ private:
 };
 
 template<typename T>
-Basis<T> make_basis(const omnes::OmnesF& o, const CFunction& pi_pi,
+Basis<T> make_basis(const omnes::OmnesF& omn, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::iteration,
         std::optional<double> accuracy=std::nullopt)
@@ -265,7 +267,7 @@ Basis<T> make_basis(const omnes::OmnesF& o, const CFunction& pi_pi,
     ///
     /// The arguments match exactly those of the class `Basis`.
 {
-    return Basis<T>{o,pi_pi,subtractions,g,pion_mass,virtuality,method,
+    return Basis<T>{omn,pi_pi,subtractions,g,pion_mass,virtuality,method,
         accuracy};
 }
 
@@ -276,7 +278,7 @@ inline constexpr double threshold(double pion_mass)
 }
 
 template<typename T>
-std::vector<Complex> discrete_basis_integrand(const omnes::OmnesF& o,
+std::vector<Complex> discrete_basis_integrand(const CurvedOmnes& o,
         const CFunction& pi_pi, const Vector& basis, const Grid<T>& g,
         double pion_mass)
     /// @brief Return the Mandelstam-s independent part of the integrand needed
@@ -296,7 +298,7 @@ std::vector<Complex> discrete_basis_integrand(const omnes::OmnesF& o,
 }
 
 template<typename T>
-cauchy::Interpolate basis_integrand(const omnes::OmnesF& o,
+cauchy::Interpolate basis_integrand(const CurvedOmnes& o,
         const CFunction& pi_pi, const Vector& basis, const Grid<T>& g,
         double pion_mass)
     /// @brief Return the interpolated Mandelstam-s independent part of the
@@ -309,7 +311,7 @@ cauchy::Interpolate basis_integrand(const omnes::OmnesF& o,
 }
 
 template<typename T>
-std::vector<cauchy::Interpolate> basis_integrands(const omnes::OmnesF& o,
+std::vector<cauchy::Interpolate> basis_integrands(const CurvedOmnes& o,
         const CFunction& pi_pi, const std::vector<Vector>& basis,
         const Grid<T>& g, double pion_mass)
     /// @brief Return the interpolated Mandelstam-s independent parts of the
@@ -323,12 +325,12 @@ std::vector<cauchy::Interpolate> basis_integrands(const omnes::OmnesF& o,
 }
 
 template<typename T>
-Basis<T>::Basis(const omnes::OmnesF& o, const CFunction& pi_pi,
+Basis<T>::Basis(const omnes::OmnesF& omn, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method, std::optional<double> accuracy)
     :
+    o{CurvedOmnes(omn, pi_pi, g)},
     _basis{basis(o,pi_pi,subtractions,g,pion_mass,virtuality,method,accuracy)},
-    o{o},
     subtractions{subtractions},
     pion_mass{pion_mass},
     grid{g},

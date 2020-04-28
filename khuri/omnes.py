@@ -25,9 +25,7 @@ def _factory(func):
 
 
 @_factory
-def generate_omnes(*args,
-                   integration_routine=IntegrationRoutine.cquad,
-                   **kwargs):
+def generate_omnes():
     """Generate an Omnes function.
 
     Parameters

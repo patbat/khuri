@@ -3,16 +3,18 @@ import itertools
 import numpy as np
 import pytest
 
-from khuri.omnes import generate_omnes
+from khuri.omnes import generate_omnes, second_sheet
 from khuri.gsl import IntegrationRoutine
-from khuri import madrid
-from khuri.tests.helpers import schwarz
+from khuri import madrid, iam
+from khuri.tests.helpers import schwarz, connected
 from khuri.tests.test_phases import PHASES, MATCHING_POINTS
 
 
 # A small value is added to avoid the evaluation of the (non-global)
 # parametrization by the Madrid group at threshold
 THRESHOLD = (2.0 * madrid.PION_MASS)**2 + 1e-6
+
+PION_MASS = 0.14
 
 
 def test_unknown_integration():
@@ -50,6 +52,28 @@ OMNES_IDS = [
     's_wave_global_qag_cut',
     's_wave_global_qag',
 ]
+
+
+def amplitude(mandelstam_s):
+    return iam.nlo(PION_MASS, mandelstam_s, 0.09, 6.0)
+
+
+SHEET_1 = generate_omnes(lambda x: np.angle(amplitude(x)),
+                         threshold=4.0 * PION_MASS**2,
+                         constant=np.pi, cut=1e10)
+
+
+def sheet_2(mandelstam_s):
+    return second_sheet(SHEET_1, amplitude, mandelstam_s)
+
+
+def test_2nd_sheet_connected():
+    mandelstam_s = np.linspace(0.7, 1.2, 20)**2
+    connected(SHEET_1, sheet_2, mandelstam_s)
+
+
+def test_2nd_sheet_schwarz():
+    schwarz(sheet_2, 1.3 + 4.0j)
 
 
 @pytest.mark.parametrize('function', OMNES_LIST, ids=OMNES_IDS)

@@ -56,6 +56,11 @@ public:
             return omnes::second_sheet(o, amplitude, mandelstam_s);
         return o(mandelstam_s);
     }
+
+    const omnes::OmnesF& original() const
+    {
+        return o;
+    }
 private:
     omnes::OmnesF o;
     CFunction amplitude;

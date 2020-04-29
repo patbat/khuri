@@ -30,6 +30,7 @@
 /// and the function `make_basis`, everything else may be consired as
 /// implementation details.
 namespace kernel {
+using omnes::OmnesF;
 using curved_omnes::CurvedOmnes;
 using grid::Complex;
 using grid::Grid;
@@ -86,7 +87,7 @@ inline double max_distance(const Vector& a, const Vector& b)
 }
 
 template<typename T>
-std::vector<Complex> generate_x_dependent(const CurvedOmnes& o,
+std::vector<Complex> generate_x_dependent(const OmnesF& o,
     const CFunction& pi_pi,
     const Grid<T>& g, double pion_mass, int subtractions)
     /// Generate the x_j dependent terms needed in the integration kernel.
@@ -113,7 +114,7 @@ Matrix generate_kernel(const CurvedOmnes& o, const CFunction& pi_pi,
 
     // x_j dependent terms
     const std::vector<Complex> x_dependent{
-        generate_x_dependent(o,pi_pi,g,pion_mass,subtractions)};
+        generate_x_dependent(o.original(),pi_pi,g,pion_mass,subtractions)};
 
     // t(x_i,z_a) dependent terms
     std::vector<Complex> t(n);
@@ -227,7 +228,7 @@ template<typename T>
 /// The basis of the solution space to a KT equation.
 class Basis {
 public:
-    Basis(const omnes::OmnesF& omn, const CFunction& pi_pi, int subtractions,
+    Basis(const OmnesF& omn, const CFunction& pi_pi, int subtractions,
         const Grid<T>& g, double pion_mass, double virtuality,
         Method method=Method::inverse,
         std::optional<double> accuracy=std::nullopt);
@@ -250,7 +251,7 @@ public:
 private:
     gsl::Cquad integrate;
 
-    CurvedOmnes o;
+    CurvedOmnes curved_omn;
     std::vector<Vector> _basis;
     int subtractions;
     double pion_mass;
@@ -259,7 +260,7 @@ private:
 };
 
 template<typename T>
-Basis<T> make_basis(const omnes::OmnesF& omn, const CFunction& pi_pi,
+Basis<T> make_basis(const OmnesF& omn, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method=Method::iteration,
         std::optional<double> accuracy=std::nullopt)
@@ -278,7 +279,7 @@ inline constexpr double threshold(double pion_mass)
 }
 
 template<typename T>
-std::vector<Complex> discrete_basis_integrand(const CurvedOmnes& o,
+std::vector<Complex> discrete_basis_integrand(const OmnesF& o,
         const CFunction& pi_pi, const Vector& basis, const Grid<T>& g,
         double pion_mass)
     /// @brief Return the Mandelstam-s independent part of the integrand needed
@@ -298,7 +299,7 @@ std::vector<Complex> discrete_basis_integrand(const CurvedOmnes& o,
 }
 
 template<typename T>
-cauchy::Interpolate basis_integrand(const CurvedOmnes& o,
+cauchy::Interpolate basis_integrand(const OmnesF& o,
         const CFunction& pi_pi, const Vector& basis, const Grid<T>& g,
         double pion_mass)
     /// @brief Return the interpolated Mandelstam-s independent part of the
@@ -311,7 +312,7 @@ cauchy::Interpolate basis_integrand(const CurvedOmnes& o,
 }
 
 template<typename T>
-std::vector<cauchy::Interpolate> basis_integrands(const CurvedOmnes& o,
+std::vector<cauchy::Interpolate> basis_integrands(const OmnesF& o,
         const CFunction& pi_pi, const std::vector<Vector>& basis,
         const Grid<T>& g, double pion_mass)
     /// @brief Return the interpolated Mandelstam-s independent parts of the
@@ -325,16 +326,16 @@ std::vector<cauchy::Interpolate> basis_integrands(const CurvedOmnes& o,
 }
 
 template<typename T>
-Basis<T>::Basis(const omnes::OmnesF& omn, const CFunction& pi_pi,
+Basis<T>::Basis(const OmnesF& omn, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
         double virtuality, Method method, std::optional<double> accuracy)
     :
-    o{CurvedOmnes(omn, pi_pi, g)},
-    _basis{basis(o,pi_pi,subtractions,g,pion_mass,virtuality,method,accuracy)},
+    curved_omn{CurvedOmnes(omn, pi_pi, g)},
+    _basis{basis(curved_omn,pi_pi,subtractions,g,pion_mass,virtuality,method,accuracy)},
     subtractions{subtractions},
     pion_mass{pion_mass},
     grid{g},
-    integrands{basis_integrands(o,pi_pi,_basis,grid,pion_mass)}
+    integrands{basis_integrands(omn,pi_pi,_basis,grid,pion_mass)}
 {
 }
 
@@ -465,7 +466,8 @@ Complex Basis<T>::operator()(std::size_t i, Complex s) const
                 grid,grid.x_parameter_lower(),grid.x_parameter_upper(),
                 s,integrand,subtractions,integrate);
 
-    return o(s) * (std::pow(s,i) + 1.5/constants::pi()*dispersive_integral);
+    return curved_omn(s)
+        * (std::pow(s,i) + 1.5/constants::pi()*dispersive_integral);
 }
 } // kernel
 

@@ -6,7 +6,7 @@
 
 namespace py = pybind11;
 
-auto t_photon_pion(mandelstam::Complex s, double z, double mass,
+auto t_vector_decay(mandelstam::Complex s, double z, double mass,
         double virtuality)
 {
     return mandelstam::t_photon_pion(s, z, mass, virtuality);
@@ -17,8 +17,8 @@ PYBIND11_MODULE(_khuri_mandelstam, m) {
               " process as well as simplified computation in several special"
               " cases.";
 
-    m.def("t_vector_decay", py::vectorize(t_photon_pion),
-        "Mandelstam t for the scattering of a vector and three scalars.",
+    m.def("t_vector_decay", py::vectorize(t_vector_decay),
+        "Mandelstam t for scattering/decay of a vector and/into three scalars.",
         py::arg("mandelstam_s"),
         py::arg("cosine"),
         py::arg("mass"),

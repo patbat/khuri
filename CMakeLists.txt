@@ -33,7 +33,6 @@ pybind11_add_module(_khuri_khuri_treiman
     "${SOURCE_DIR}/grid.cpp"
     "${SOURCE_DIR}/gsl_interface.cpp"
     "${SOURCE_DIR}/kernel.cpp"
-    "${SOURCE_DIR}/mandelstam.cpp"
     "${SOURCE_DIR}/piecewise.cpp"
     "${BINDING_DIR}/khuri_treiman_bindings.cpp")
 target_link_libraries(_khuri_khuri_treiman PRIVATE gsl gslcblas)

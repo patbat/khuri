@@ -9,8 +9,7 @@
 #include <complex>
 
 /// @brief Provide Mandelstam variables for a general four-particle process as
-/// well as simplified computation in several special cases and parametrization
-/// of complex egg.
+/// well as simplified computation in several special cases.
 namespace mandelstam {
 using phase_space::sigma;
 using phase_space::rho;
@@ -140,44 +139,6 @@ public:
 private:
     double pion_mass;
     double virtuality;
-};
-
-/// @brief Parametrization of complex egg for virtualities above the one-pion
-/// and below the three-pion threshold.
-class Egg {
-public:
-    Egg(double pion_mass, double virtuality);
-
-    Complex operator()(double x) const;
-
-    Complex derivative(double x) const;
-
-    double lower(double s) const;
-        ///< the lower limit of integration
-    double upper(double s) const;
-        ///< the upper limit of integration
-    double change() const noexcept {return 2.0*unit_;}
-        ///< @brief Return the point, where the lower circle segment ends and
-        ///< the upper circle segment starts.
-private:
-    double pion_mass;
-    double virtuality;
-    double s_greater_;
-    double s_smaller_;
-    double unit_;
-
-    Complex lower_segment(double x) const;
-        // the lower half of the egg
-    Complex upper_segment(double x) const;
-        // the upper half of the egg
-    Complex lower_derivative(double x) const;
-        // the derivative of the lower half of the egg
-    Complex upper_derivative(double x) const;
-        // the derivative of the upper half of the egg
-    Complex first_half(double x) const;
-        // the derivative in the first segment of the lower half of the egg
-    Complex second_half(double x) const;
-        // the derivative in the second segment of the lower half of the egg
 };
 } // mandelstam
 

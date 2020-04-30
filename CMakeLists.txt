@@ -45,3 +45,6 @@ pybind11_add_module(_khuri_iam
     "${SOURCE_DIR}/chpt.cpp"
     "${SOURCE_DIR}/iam.cpp"
     "${BINDING_DIR}/iam_bindings.cpp")
+
+pybind11_add_module(_khuri_mandelstam
+    "${BINDING_DIR}/mandelstam_bindings.cpp")

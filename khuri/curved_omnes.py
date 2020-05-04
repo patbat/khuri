@@ -19,5 +19,7 @@ class CurvedOmnes:
         else:
             raise ValueError('unknown curve type')
 
-        self.__call__ = self.func.__call__
         self.original = self.func.original
+
+    def __call__(self, mandelstam_s):
+        return self.func(mandelstam_s)

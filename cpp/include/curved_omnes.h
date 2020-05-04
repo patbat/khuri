@@ -50,7 +50,7 @@ public:
             "Cut needs to be specified as a class inheriting from `Curve`.");
     }
 
-    Complex operator()(const Complex& mandelstam_s) const
+    Complex operator()(Complex mandelstam_s) const
     {
         if (on_second_sheet(points, mandelstam_s))
             return omnes::second_sheet(o, amplitude, mandelstam_s);

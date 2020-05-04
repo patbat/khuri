@@ -32,6 +32,11 @@ void create_binding(py::module&m, const std::string& name)
 PYBIND11_MODULE(_khuri_curved_omnes, m) {
     m.doc() = "The Omnes function with cut along a somewhat general curve.";
 
+    py::class_<CurvedOmnes>(m, "_CurvedOmnes")
+        .def("__call__", py::vectorize(&CurvedOmnes::operator()),
+             py::arg("mandelstam_s"))
+        .def("original", &CurvedOmnes::original);
+
     create_binding<piecewise::Real>(m, "real");
     create_binding<piecewise::Vector_decay>(m, "vector_decay");
     create_binding<piecewise::Adaptive>(m, "adaptive");

@@ -1,10 +1,10 @@
 #include "omnes.h"
+#include "gsl_interface.h"
 
 #include "pybind11/pybind11.h"
 #include "pybind11/complex.h"
 #include "pybind11/numpy.h"
 #include "pybind11/functional.h"
-#include "gsl_interface.h"
 
 namespace py = pybind11;
 using omnes::Omnes;

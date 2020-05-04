@@ -56,4 +56,4 @@ pybind11_add_module(_khuri_curved_omnes
     "${SOURCE_DIR}/gsl_interface.cpp"
     "${SOURCE_DIR}/piecewise.cpp"
     "${BINDING_DIR}/curved_omnes_bindings.cpp")
-target_link_libraries(_khuri_omnes PRIVATE gsl gslcblas)
+target_link_libraries(_khuri_curved_omnes PRIVATE gsl gslcblas)

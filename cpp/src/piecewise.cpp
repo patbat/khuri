@@ -123,14 +123,21 @@ std::vector<Complex> adaptive_points(double pion_mass, double virtuality,
     const mandelstam::Critical critical{pion_mass,virtuality};
     const auto lower{-critical.imaginary_radius()};
     const auto right{critical.right()+m2};
+    const double threshold{4.0*m2};
 
-    const auto x1{4.0*m2};
-    const Complex x2{x1,lower};
-    const Complex x3{right,lower};
-    const auto x4{right};
-    const auto x5{mandelstam::s_greater(pion_mass,virtuality)};
-
-    return {x1,x2,x3,x4,x5,cut};
+    std::vector<Complex> result;
+    result.reserve(4);
+    result.emplace_back(threshold);
+    result.emplace_back(threshold,lower);
+    result.emplace_back(right,lower);
+    result.emplace_back(right);
+    if (cut <= result.back().real())
+        return result;
+    result.emplace_back(mandelstam::s_greater(pion_mass,virtuality));
+    if (cut <= result.back().real())
+        return result;
+    result.emplace_back(cut);
+    return result;
 }
 
 Adaptive::Adaptive(double pion_mass, double virtuality, double cut)

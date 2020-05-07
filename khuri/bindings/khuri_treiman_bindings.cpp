@@ -38,6 +38,7 @@ void create_grid_binding(py::module& m, const std::string& type_name)
     py::class_<G, T>(m, name.c_str())
         .def(py::init<V, std::vector<std::size_t>, std::size_t>(),
              init_docstring.c_str())
+        .def(py::init<V, double, std::size_t>())
         .def("__call__", py::vectorize(&G::operator()),
              py::arg("x_index"),
              py::arg("z_index"))

@@ -6,7 +6,9 @@
 
 #include <algorithm>
 #include <complex>
+#include <cmath>
 #include <iterator>
+#include <numeric>
 #include <optional>
 #include <tuple>
 #include <type_traits>
@@ -80,6 +82,32 @@ auto knots_along_piecewise_curve(std::vector<double> boundaries,
     return result;
 }
 
+template<typename T>
+std::vector<size_t> evenly_spaced(const T& curve, double x_step)
+    /// @brief Return the number of knots needed on each segment of `curve`
+    /// such that the sites are roughly evenly spaced.
+    ///
+    /// @param curve The continuous curve in the x-plane.
+    /// @param x_step The approximate distance of the knots on the curve.
+{
+    if (x_step <= 0)
+        throw std::invalid_argument{"stepsize needs to be positive"};
+
+    const auto points{boundary_points(curve)};
+    std::vector<Complex> differences(points.size());
+    std::adjacent_difference(points.cbegin(), points.cend(),
+                             differences.begin());
+
+    std::vector<size_t> result;
+    std::transform(std::next(differences.cbegin(), 1), differences.cend(),
+                   std::back_inserter(result),
+                   [x_step](const auto& d)
+                   {
+                       return std::ceil(std::abs(d) / x_step);
+                   });
+    return result;
+}
+
 /// A point in the (x,z)-plane.
 struct Point {
     constexpr Point(const Complex& x, double x_weight,
@@ -102,6 +130,8 @@ struct Point {
 };
 
 /// A curve in the complex plane.
+///
+/// A valid curve contains at least two boundary points.
 struct Curve {
     /// @brief The pair represents the lowest and highest value of a variable
     /// parametrising a curve.
@@ -136,7 +166,12 @@ struct Curve {
         ///<    curve_func(boundaries()[1]) == B
         ///<
         ///<    curve_func(boundaries()[2]) == C
+        ///<
+        ///< See also the free function `boundary_points`.
 };
+
+std::vector<Complex> boundary_points(const Curve& c);
+    ///< Return the boundary points of a curve.
 
 template<typename T>
 /// A grid in the (x,z)-plane.
@@ -154,6 +189,12 @@ public:
         ///< @param t The continuous curve in the x-plane.
         ///< @param x_sizes The number of knots along the (different segements
         ///< of the) curve in the x-plane.
+        ///< @param z_size The number of knots along the line in the z-plane.
+
+    Grid(const T& t, double x_step, std::size_t z_size);
+        ///< @param t The continuous curve in the x-plane.
+        ///< @param x_step The distance between adjacent knots along the  curve
+        ///< in the x-plane.
         ///< @param z_size The number of knots along the line in the z-plane.
 
     Point operator()(std::size_t x_index, std::size_t z_index) const;
@@ -202,6 +243,13 @@ Grid<T>::Grid(const T& t, std::vector<std::size_t> x_sizes, std::size_t z_size)
                 [t](const auto x) {return t.derivative_func(x);})},
     z_knots{generate_knots(z_lower,z_upper,z_size)}
 {
+}
+
+template<typename T>
+Grid<T>::Grid(const T& t, double x_step, std::size_t z_size)
+    : T{t}
+{
+    *this = Grid(t, evenly_spaced(t, x_step), z_size);
 }
 
 template<typename T>

@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 
 from khuri import iam
 from khuri.phase_space import rho

@@ -8,7 +8,7 @@ dispersion relations, e.g. Omnes function(s).
 
 .. toctree::
    :maxdepth: 2
-    
+
    content/installation.rst
    content/conventions.rst
    content/first_steps.rst

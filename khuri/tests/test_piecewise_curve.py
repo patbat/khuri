@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from khuri.khuri_treiman import Piecewise, Real
+from khuri.khuri_treiman import Real
 
 LOWER_VALUE = 4.0
 UPPER_VALUE = 100.0

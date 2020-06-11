@@ -22,6 +22,7 @@ def omnes_function():
     return omnes.generate_omnes(phase, threshold=THRESHOLD,
                                 constant=np.pi, cut=1e10)
 
+
 @pytest.fixture
 def curve():
     return kt.Real(4.0, 100.0)

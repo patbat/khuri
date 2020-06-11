@@ -14,7 +14,7 @@ void check(int status)
             throw Allocation_error{message};
         case GSL_EDIVERGE: // integral is divergent or too slowly convergent
             throw Divergence_error{message};
-        case GSL_EMAXITER: // maximum number of subdivisions in integration 
+        case GSL_EMAXITER: // maximum number of subdivisions in integration
                            // exceeded
             throw Subdivision_error{message};
         case GSL_EROUND: // roundoff error
@@ -90,7 +90,7 @@ double Gauss_Legendre::operator()(Function f, double lower,
     // `Function` to the GSL routine. `unwrap` takes care of everything, i.e.
     // applies this function. This way, the GSL routine can be used to
     // integrate both function objects and ordinary functions.
-    wrapper.params = &f; 
+    wrapper.params = &f;
     return gsl_integration_glfixed(&wrapper,lower,upper,table.get());
 }
 
@@ -131,7 +131,7 @@ Value Qag::operator()(Function f, double lower, double upper) const
     // `Function` to the GSL routine. `unwrap` takes care of everything, i.e.
     // applies this function. This way, the GSL routine can be used to
     // integrate both function objects and ordinary functions.
-    wrapper.params = &f; 
+    wrapper.params = &f;
 
     double result{0.0};
     double error{0.0};
@@ -297,7 +297,7 @@ Interpolate::~Interpolate() noexcept
     gsl_interp_free(spline);
     gsl_interp_accel_free(acc);
 }
- 
+
 Interpolation_method::Interpolation_method(Interpolation_method::Method m)
 {
     switch (m) {

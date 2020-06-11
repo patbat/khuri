@@ -1,6 +1,5 @@
 import itertools
 
-import pytest
 import numpy as np
 
 import khuri.amplitude as ka

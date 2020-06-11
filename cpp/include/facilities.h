@@ -78,7 +78,7 @@ constexpr auto compose(F&& f, G&& g)
 }
 
 template<class Number>
-std::vector<Number> linspace(Number left, Number right, std::size_t size) 
+std::vector<Number> linspace(Number left, Number right, std::size_t size)
     /// @brief Return a `vector` containing `size` evenly spaced values in
     /// [`left`,`right`].
 

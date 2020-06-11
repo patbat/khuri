@@ -23,18 +23,18 @@ B1_UFD = 0.15
 LAMBDA1_UFD = 1.57
 LAMBDA2_UFD = -1.96
 
-S0 = 1.05**2 # in (GeV)^2
+S0 = 1.05**2  # in (GeV)^2
 
 # The masses are parameters that determine the shape of the phase.
 # They are not necessarily the physical masses of the particles.
-KAON_MASS = 0.496 # in GeV
-RHO_MASS = 0.7736 # in GeV
-PION_MASS = 0.13957 # in GeV
+KAON_MASS = 0.496  # in GeV
+RHO_MASS = 0.7736  # in GeV
+PION_MASS = 0.13957  # in GeV
 
 # The parametrization is not valid for energies below LOWEST
 # or above HIGHEST.
-LOWEST = 2.0*PION_MASS # in GeV
-HIGHEST = 1.42 # in GeV
+LOWEST = 2.0*PION_MASS  # in GeV
+HIGHEST = 1.42  # in GeV
 
 
 def _momentum(s, m):
@@ -61,7 +61,7 @@ def _w(s, s0=S0):
     """
     a = np.sqrt(s)
     b = np.sqrt(s0 - s)
-    return  (a-b) / (a+b)
+    return (a-b) / (a+b)
 
 
 def phase_low(s, m_pi, m_rho, b0, b1, s0=S0):
@@ -109,7 +109,7 @@ def phase_high(s, m_k, lambda_0, lambda_1, lambda_2):
 
 def lambda0(m_pi, m_k, m_rho, b0, b1, s0):
     s = 4.0*m_k**2
-    return phase_low(s,m_pi,m_rho,b0,b1,s0)
+    return phase_low(s, m_pi, m_rho, b0, b1, s0)
 
 
 @np.vectorize
@@ -154,4 +154,4 @@ def phase(
         return phase_high(s, m_k, l0, lambda_1, lambda_2)
     else:
         raise ValueError(f'{s} is above region, in which the parametrization'
-                          ' of the phase is valid')
+                         ' of the phase is valid')

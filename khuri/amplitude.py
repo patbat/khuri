@@ -45,7 +45,9 @@ def from_cot(mass: float, spin: Optional[int] = None):
 def from_phase(mass, inelasticity=None):
     """Obtain amplitude from the phase."""
     if inelasticity is None:
-        inelasticity = lambda _: 1.0
+        def inelasticity(_):
+            return 1.0
+
     def wrapper(phase):
         @wraps(phase)
         def amplitude(*args):

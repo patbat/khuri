@@ -16,7 +16,7 @@ def sigma(s):
 
 
 def test_compare_along_real_axis():
-    """The values above threshold should be independent of the cut structure."""
+    """Values above threshold should be independent of the cut structure."""
     mandelstam_s = np.linspace(THRESHOLD, 1000)
     comparision = np.allclose(rho(mandelstam_s), sigma(mandelstam_s))
     assert comparision, test_compare_along_real_axis.__doc__

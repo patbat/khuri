@@ -29,13 +29,12 @@ from khuri.amplitude import from_cot, second_sheet
 from khuri.phase_space import rho
 
 
+# general / helpers ###########################################################
 
-## general / helpers ##########################################################
 
-
-PION_MASS = 0.13957 # in GeV
-KAON_MASS = 0.496 # in GeV
-S_MATCHING = 1.4**2 # in GeV
+PION_MASS = 0.13957  # in GeV
+KAON_MASS = 0.496  # in GeV
+S_MATCHING = 1.4**2  # in GeV
 
 
 def arccot2(x):
@@ -86,8 +85,7 @@ def omega_2(s, s_m=S_MATCHING, constant=2.0):
     return 2.0 * (csqrt(s) - sqrt_m) / (constant - sqrt_m) - 1.0
 
 
-
-## s-wave #####################################################################
+# s-wave ######################################################################
 
 
 S_WAVE_F_0_POLE = (0.996 - 0.025j)**2
@@ -199,7 +197,6 @@ def generate_s_wave(conformal_coeff, adler, f_0_coefficients, f_0_pole):
         return np.sqrt((2.0 * space * amp.real)**2
                        + (1.0 - 2.0 * space * amp.imag)**2)
 
-
     return (increasing_phase,
             amplitude,
             second_sheet(PION_MASS)(amplitude),
@@ -215,11 +212,10 @@ def generate_s_wave(conformal_coeff, adler, f_0_coefficients, f_0_pole):
                                         S_WAVE_F_0_POLE)
 
 
+# p-wave ######################################################################
 
-## p-wave #####################################################################
 
-
-P_WAVE_RHO_MASS = 0.7752 # in GeV
+P_WAVE_RHO_MASS = 0.7752  # in GeV
 
 P_WAVE_CONFORMAL_COEFFICIENTS_1 = (0.97, 0.12, -0.18, 0.40, 1.65)
 P_WAVE_D_0_1 = 11.1

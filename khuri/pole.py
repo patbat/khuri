@@ -9,7 +9,6 @@ Most important functions:
 * coupling
 """
 from typing import Callable, Tuple
-import warnings
 
 import numpy as np
 from scipy.optimize import root
@@ -99,7 +98,8 @@ def coupling(func: Amplitude,
     denominator = generate_denominator(func, mass)
     numerator = func(pole_position)
     residue = numerator / derivative(denominator, pole_position, dx=1e-3)
-    coupling_squared = -48.0 * np.pi / (pole_position - 4.0 * mass**2) * residue
+    coupling_squared = (-48.0 * np.pi / (pole_position - 4.0 * mass**2)
+                        * residue)
     return coupling_squared
 
 

@@ -9,7 +9,8 @@
 #include <string>
 #include <vector>
 
-/// Useful small facilities needed in many situations.
+/// Useful small facilities needed in many situations that are not specific
+/// to Khuri Treiman equations/dispersion relations.
 namespace facilities {
 
 /// An interface for an output stream that can be switched on and off.

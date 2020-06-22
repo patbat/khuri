@@ -4,6 +4,7 @@
 #include "cauchy.h"
 #include "constants.h"
 #include "gsl_interface.h"
+#include "helpers.h"
 #include "phase_space.h"
 #include "type_aliases.h"
 
@@ -20,6 +21,7 @@ namespace omnes {
 using namespace std::complex_literals;
 using type_aliases::Complex;
 using type_aliases::CFunction;
+using helpers::hits_threshold;
 
 /// The Omnes function for arbitrary phases and thresholds.
 template<typename Integrate=gsl::Cquad>
@@ -74,8 +76,6 @@ private:
 
     Complex upper(const Complex& s) const;
         // Evaluate the Omnes function in the upper half of the complex plane
-    bool hits_threshold(const Complex& s) const;
-        // Return true if `s` is close to the `threshold`, false otherwise.
     bool hits_cut(const Complex& s) const;
         // Return true if `s` is in the region around the branch cut, false
         // otherwise.
@@ -141,19 +141,12 @@ Complex Omnes<T>::operator()(Complex s) const
 template<typename T>
 Complex Omnes<T>::upper(const Complex& s) const
 {
-    if (hits_threshold(s))
+    if (hits_threshold(threshold, s, minimal_distance))
         return threshold_presciption(s.real());
     if (hits_cut(s))
         return cut_prescription(s.real());
     else
         return ordinary_prescription(s);
-}
-
-template<typename T>
-bool Omnes<T>::hits_threshold(const Complex& s) const
-{
-    double distance{std::abs(s-threshold)};
-    return distance<=minimal_distance;
 }
 
 template<typename T>

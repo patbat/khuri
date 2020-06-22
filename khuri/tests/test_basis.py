@@ -46,6 +46,8 @@ def test_basis(omnes_function, grid):
                          pion_mass,
                          virtuality)
     assert isinstance(basis(0, 2.0-10.0j), complex)
+    threshold = 4.0
+    assert isinstance(basis(0, threshold), complex)
 
     with pytest.raises(IndexError):
         basis(1, 10.0)

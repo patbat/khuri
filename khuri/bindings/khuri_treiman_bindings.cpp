@@ -86,7 +86,8 @@ void create_basis_binding(py::module& m, const std::string& type_name)
                       double,
                       double,
                       Method,
-                      std::optional<double>>(),
+                      std::optional<double>,
+                      double>(),
              init_docstring.c_str(),
              py::arg("o"),
              py::arg("pi_pi"),
@@ -95,7 +96,8 @@ void create_basis_binding(py::module& m, const std::string& type_name)
              py::arg("pion_mass"),
              py::arg("virtuality"),
              py::arg("method")=Method::inverse,
-             py::arg("accuracy")=std::nullopt)
+             py::arg("accuracy")=std::nullopt,
+             py::arg("minimal_distance")=1e-4)
         .def("__call__", py::vectorize(&B::operator()),
              call_docstring.c_str(),
              py::arg("i"),

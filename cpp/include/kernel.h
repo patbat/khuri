@@ -6,6 +6,7 @@
 #include "curved_omnes.h"
 #include "facilities.h"
 #include "grid.h"
+#include "helpers.h"
 #include "mandelstam.h"
 #include "omnes.h"
 #include "phase_space.h"
@@ -39,6 +40,7 @@ using Matrix =
     Eigen::Matrix<Complex,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>;
 using Vector = Eigen::VectorXcd;
 using facilities::square;
+using helpers::hits_threshold_m;
 using type_aliases::CFunction;
 
 constexpr inline std::size_t index(std::size_t x_index, std::size_t z_index,
@@ -231,7 +233,8 @@ public:
     Basis(const OmnesF& omn, const CFunction& pi_pi, int subtractions,
         const Grid<T>& g, double pion_mass, double virtuality,
         Method method=Method::inverse,
-        std::optional<double> accuracy=std::nullopt);
+        std::optional<double> accuracy=std::nullopt,
+        double minimal_distance=1e-4);
         ///< @param o the Omnes function
         ///< @param pi_pi the pion pion scattering amplitude
         ///< @param subtraction the number of subtractions
@@ -255,6 +258,8 @@ private:
     std::vector<Vector> _basis;
     int subtractions;
     double pion_mass;
+    double minimal_distance;
+
     Grid<T> grid;
     std::vector<cauchy::Interpolate> integrands;
 };
@@ -270,12 +275,6 @@ Basis<T> make_basis(const OmnesF& omn, const CFunction& pi_pi,
 {
     return Basis<T>{omn,pi_pi,subtractions,g,pion_mass,virtuality,method,
         accuracy};
-}
-
-inline constexpr double threshold(double pion_mass)
-    /// Return the two-pion threshold.
-{
-    return 4.0*square(pion_mass);
 }
 
 template<typename T>
@@ -328,12 +327,14 @@ std::vector<cauchy::Interpolate> basis_integrands(const OmnesF& o,
 template<typename T>
 Basis<T>::Basis(const OmnesF& omn, const CFunction& pi_pi,
         int subtractions, const Grid<T>& g, double pion_mass,
-        double virtuality, Method method, std::optional<double> accuracy)
+        double virtuality, Method method, std::optional<double> accuracy,
+        double minimal_distance)
     :
     curved_omn{CurvedOmnes(omn, pi_pi, g)},
     _basis{basis(curved_omn,pi_pi,subtractions,g,pion_mass,virtuality,method,accuracy)},
     subtractions{subtractions},
     pion_mass{pion_mass},
+    minimal_distance{minimal_distance},
     grid{g},
     integrands{basis_integrands(omn,pi_pi,_basis,grid,pion_mass)}
 {
@@ -389,13 +390,6 @@ Complex ordinary_prescription(Grid<T> grid, double lower, double upper,
     return std::pow(s,subtractions)*result;
 }
 
-inline bool hits_threshold(double pion_mass, const Complex& s)
-    /// Return true if `s` hits the two-pion threshold.
-{
-    constexpr double minimal_distance{1e-16};
-    return std::norm(s-threshold(pion_mass)) < minimal_distance;
-}
-
 template<typename T>
 constexpr bool tolerant_equal(T a, T b, T tolerance=1e-16)
     /// Check whether `a` and `b` are equal up to `tolerance`.
@@ -444,11 +438,13 @@ std::vector<std::pair<T,T>> segments_without(const std::vector<T>& points,
 template<typename T>
 Complex Basis<T>::operator()(std::size_t i, Complex s) const
 {
+    if (hits_threshold_m(pion_mass,s,minimal_distance)) {
+        const double shift{minimal_distance * 1.1};
+        return ((*this)(i, s - shift) + (*this)(i, s + shift)) / 2.0;
+    }
     const auto& integrand{integrands.at(i)};
     Complex dispersive_integral;
-    if (hits_threshold(pion_mass,s)) // TODO: improve the handling of this case
-        dispersive_integral = std::numeric_limits<double>::quiet_NaN();
-    else if (const auto segment = grid.hits(s)) {
+    if (const auto segment = grid.hits(s)) {
         const auto x0{grid.x_parameter_lower()};
         const auto x1{segment->first};
         const auto x2{segment->second};
